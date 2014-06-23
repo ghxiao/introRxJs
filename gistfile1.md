@@ -1,4 +1,6 @@
 ```coffeescript
-followingSuggestionsStream = ...
+allSuggestions
+
+followSuggestions = ...
 
 ```
