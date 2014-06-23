@@ -1,5 +1,5 @@
 ```coffeescript
-allSuggestions
+allSuggestions = 
 
 followSuggestions = ...
 
