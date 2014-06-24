@@ -5,4 +5,4 @@ followSuggestions = ...
 
 ```
 
-http://jsfiddle.net/staltz/8jFJH/3/
+http://jsfiddle.net/staltz/8jFJH/7
