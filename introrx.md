@@ -24,11 +24,6 @@ Let's just say that you want to have a stream of "double click" events. To make 
 
 Well, in FRP it's pretty simple. In fact, the logic is just 3 lines of code. http://jsfiddle.net/staltz/4gGgs/20/
 
-```coffeescript
-allSuggestions = 
 
-followSuggestions = ...
 
-```
-
-http://jsfiddle.net/staltz/8jFJH/7
+http://jsfiddle.net/staltz/8jFJH/33
