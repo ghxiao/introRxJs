@@ -14,7 +14,7 @@ If streams are so central to FRP, let's take a careful look at them, starting fr
 
 ![Click event stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/733a91fd36cb655a7e706d1ac9caab6f788b9a1d/zclickstream.png)
 
-A stream is a sequence of ongoing events ordered in time. It can have emit three different things: a value (of some type), an error, or a "completed" signal. Consider that the "completed" takes place, for instance, when the current window or view containing that button is closed.
+A stream is a sequence of ongoing events ordered in time. It can emit three different things: a value (of some type), an error, or a "completed" signal. Consider that the "completed" takes place, for instance, when the current window or view containing that button is closed.
 
 
 
