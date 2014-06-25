@@ -1,5 +1,4 @@
-
-## What is Functional Reactive Programming?
+### What is Functional Reactive Programming?
 
 ```coffeescript
 allSuggestions = 
