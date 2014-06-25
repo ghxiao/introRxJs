@@ -4,7 +4,7 @@
 
 So let's cut the bullshit. 
 
-###FRP is programming with asynchronous data (or event) streams. 
+#### FRP is programming with asynchronous data (or event) streams. 
 
 In a way, this isn't anything new. Your typical click events are really an asynchronous event stream, on which you can observe and do some side effects. FRP takes that idea and puts it on steroids. You are able to create data streams of anything, not just from click and hover events. Imagine your Twitter feed would be a data stream in the same fashion that click events are. So you can listen to that stream and react accordingly.
 
