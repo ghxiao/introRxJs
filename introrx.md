@@ -8,7 +8,7 @@ So let's cut the bullshit.
 
 In a way, this isn't anything new. Your typical click events are really an asynchronous event stream, on which you can observe and do some side effects. FRP takes that idea and puts it on steroids. You are able to create data streams of anything, not just from click and hover events. Anything can be a stream: variables, user inputs, caches, data structures, etc. For example, imagine your Twitter feed would be a data stream in the same fashion that click events are. You can listen to that stream and react accordingly.
 
-**On top of that, you are given an amazing toolbox of functions to combine, create and filter any of those streams.** That's where "functional" kicks in. A stream can be used as an input to another one. Even multiple streams can be used as inputs to another stream. You can _merge_ two streams. You can _filter_ a stream to get another one that has only those events you are interested in. You can _map_ data values from one stream to another new one.
+**On top of that, you are given an amazing toolbox of functions to combine, create and filter any of those streams.** That's where "functional" magic kicks in. A stream can be used as an input to another one. Even multiple streams can be used as inputs to another stream. You can _merge_ two streams. You can _filter_ a stream to get another one that has only those events you are interested in. You can _map_ data values from one stream to another new one.
 
 If streams are so central to FRP, let's take a careful look at them, starting with our familiar "clicks on a button" event stream.
 
