@@ -10,6 +10,10 @@ In a way, this isn't anything new. Your typical click events are really an async
 
 On top of that, you are given an amazing toolbox of functions to combine, create and filter any of those streams. That's where "functional" kicks in. A stream can be used as an input to another one. Even multiple streams can be used as inputs to another stream. You can _merge_ two streams. You can _filter_ a stream to get another one that has only those events you are interested in. You can _map_ data values from one stream to another new one.
 
+If streams are so central to FRP, let's take a careful look at them, starting from our familiar "clicks on a button" event stream.
+
+A stream is a sequence of ongoing events ordered in time. It can have emit three different things: a value (of some type), an error, or a "completed" signal. Consider that the "completed" takes place, for instance, when the current window or view containing that button is closed.
+
 
 
 ```coffeescript
