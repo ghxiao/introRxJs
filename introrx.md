@@ -29,6 +29,7 @@ But let's ignore code for now. Thinking in diagrams is the best way to understan
 
 ![Multiple clicks stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/b3a85b60c6005e02462b29f1c92783fca0829152/zmulticlickstream.png)
 
+Grey boxes are functions transforming one stream into another. First we accumulate clicks in lists, whenever 250 milliseconds of "event silence" has happened (the `buffer()` function). The result is a stream of lists, from which we apply `map()` to map each list to an integer matching the length of that list. Finally, we ignore `1` integers using the `filter(x >= 2)` function. That's it: 3 simple operations to produce our intended stream. We can then subscribe ("listen") to it to react accordingly how we wish. 
 
 
 http://jsfiddle.net/staltz/8jFJH/33
