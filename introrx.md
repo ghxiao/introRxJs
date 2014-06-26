@@ -33,6 +33,6 @@ Grey boxes are functions transforming one stream into another. First we accumula
 
 I hope you enjoy the beauty of this approach. This example is just the tip of the iceberg: you can apply the same operations on different kinds of streams, for instance, on a stream of API responses; on the other hand, there are many other functions available.
 
-### Why use FRP?
+### What's the benefits of programming with asynchronous event streams?
 
 http://jsfiddle.net/staltz/8jFJH/33
