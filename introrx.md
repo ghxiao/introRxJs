@@ -24,6 +24,8 @@ Let's just say that you want to have a stream of "double click" events. To make 
 
 Well, in FRP it's pretty simple. In fact, the logic is just 4 lines of code. http://jsfiddle.net/staltz/4gGgs/22/
 
+![Multiple clicks stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/5c717feb38203fc6d089970e276e064dc81fd52d/zmulticlickstream.png)
+
 
 
 http://jsfiddle.net/staltz/8jFJH/33
