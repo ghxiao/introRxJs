@@ -2,7 +2,7 @@
 
 You probably opened this tutorial because you're curious in learning this new thing called Reactive Programming.
 
-Learning (Functional) Reactive Programming is hard, even harder by the lack of good material. When I started learning, I tried looking for tutorials. I found only a handful of practical guides, but they only scratched the surface and never tackled the challenge of building the whole architecture around FRP. Library documentations often don't help when you're trying to understand some tool. I mean, honestly, look at this:
+Learning (Functional) Reactive Programming is hard, even harder by the lack of good material. When I started learning, I tried looking for tutorials. I found only a handful of practical guides, but they only scratched the surface and never tackled the challenge of building the whole architecture around FRP. Library documentations often don't help when you're trying to understand some function. I mean, honestly, look at this:
 
 > **Rx.Observable.prototype.flatMapLatest(selector, [thisArg])**
 
