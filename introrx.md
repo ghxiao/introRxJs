@@ -67,4 +67,13 @@ In Twitter there's is this UI element that suggests other accounts you could fol
 
 ![Twitter Who to follow suggestions box](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/eb151a86fb9f6496937b9bd9758c3d4970a2e2e1/ztwitterbox.png)
 
+We are going to focus on imitating its core features, which are:
+
+* On startup, load accounts data from the API and display 3 suggestions
+* On clicking "Refresh", load other 3 account suggestions onto the 3 rows
+* On click 'x' button on an account row, clear only that current account and display another
+* Each row displays the account's avatar and links to their page
+
+We can leave out the other features and buttons because they are minor.
+
 http://jsfiddle.net/staltz/8jFJH/33
