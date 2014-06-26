@@ -2,6 +2,7 @@
 
 Learning (Functional) Reactive Programming isn't the easiest thing. When I started learning, I tried looking for tutorials. I found only a handful practical guides, but they only scratched the surface and never tackled the challenge of building the whole architecture around FRP. Library documentations often don't help when you're trying to understand some tool. I mean, honestly, look at this:
 
+> **Rx.Observable.prototype.flatMapLatest(selector, [thisArg])**
 > Projects each element of an observable sequence into a new sequence of observable sequences by incorporating the element's index and then transforms an observable sequence of observable sequences into an observable sequence producing values only from the most recent observable sequence.
 
 I've read two books, one just 
