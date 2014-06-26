@@ -1,5 +1,11 @@
 ## The introduction to Reactive Programming you've been missing
 
+Learning (Functional) Reactive Programming isn't the easiest thing. When I started learning, I tried looking for tutorials. I found only a handful practical guides, but they only scratched the surface and never tackled the challenge of building the whole architecture around FRP. Library documentations often don't help when you're trying to understand some tool. I mean, honestly, look at this:
+
+> Projects each element of an observable sequence into a new sequence of observable sequences by incorporating the element's index and then transforms an observable sequence of observable sequences into an observable sequence producing values only from the most recent observable sequence.
+
+I've read two books, one just 
+
 ### "What is Functional Reactive Programming (FRP)?"
 
 **(You can skip this paragraph.)** There are plenty of bad explanations and definitions out there on the internet. [Wikipedia](https://en.wikipedia.org/wiki/Functional_reactive_programming) is too generic and theoretical as usual. [Stackoverflow](http://stackoverflow.com/questions/1028250/what-is-functional-reactive-programming)'s canonical answer is obviously not suitable for new comers. [Reactive Manifesto](http://www.reactivemanifesto.org/) sounds like the kind of thing you show to your project manager or the businessmen at your company. Microsoft's [Rx terminology](https://rx.codeplex.com/) "Rx = Observables + LINQ + Schedulers" is so heavy and Microsoftish that most of us are left confused. Terms like "reactive" and "propagation of change" don't convey anything specifically different to what your typical MV* and favorite language already does. Of course my framework views react to the models. Of course change is propagated. If it wouldn't, nothing would be rendered.
