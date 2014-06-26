@@ -61,6 +61,6 @@ Let's dive into the real stuff. A real-world example with a step-by-step guide o
 
 I picked Javascript and RxJS as the tools for this, for a reason: Javascript is the most familiar language out there at the moment, and the Rx* library family is widely available for many languages (C#, Java, Javascript, Ruby, Python, C++). So whatever your tools are, you can concretely benefit by following this tutorial.
 
-### Implementing a "Who to follow" suggestions box in FRP
+## Implementing a "Who to follow" suggestions box in FRP
 
 http://jsfiddle.net/staltz/8jFJH/33
