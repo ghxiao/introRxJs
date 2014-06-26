@@ -59,7 +59,7 @@ Apps nowadays have an abundancy of real-time events of every kind that enable a 
 
 Let's dive into the real stuff. A real-world example with a step-by-step guide on how to think in FRP. No synthetic examples, no half-explained concepts. By the end of this tutorial we will have produced real functioning code, while knowing why we did each thing.
 
-I picked **Javascript** and **RxJS** as the tools for this, for a reason: Javascript is the most familiar language out there at the moment, and the Rx* library family is widely available for many languages (C#, Java, Javascript, Ruby, Python, C++, etc). So whatever your tools are, you can concretely benefit by following this tutorial.
+I picked **Javascript** and **RxJS** as the tools for this, for a reason: Javascript is the most familiar language out there at the moment, and the [Rx* library family](https://rx.codeplex.com/) is widely available for many languages (C#, Java, Javascript, Ruby, Python, C++, etc). So whatever your tools are, you can concretely benefit by following this tutorial.
 
 ### Implementing a "Who to follow" suggestions box in FRP
 
