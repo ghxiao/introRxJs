@@ -55,4 +55,10 @@ The benefit is more evident in modern webapps and mobile apps, that are highly i
 
 Apps nowadays have an abundancy of real-time events of every kind that enable a highly interactive experience to the user. We need tools for properly dealing with that, and Functional Reactive Programming is the answer.
 
+### Thinking in FRP, with examples
+
+Let's dive into the real stuff. Real-world examples with a step-by-step guide on how to think in FRP. No synthetic examples, no half-explained concepts. By the end of this tutorial we will have produced real functioning code, while knowing why we did each thing.
+
+I picked Javascript and RxJS as the tools for this, for a reason: Javascript is the most familiar language out there at the moment, and the Rx* library family is widely available for many languages (C#, Java, Javascript, Ruby, Python, C++). So whatever your tools are, you can concretely benefit by following this tutorial.
+
 http://jsfiddle.net/staltz/8jFJH/33
