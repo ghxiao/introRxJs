@@ -1,12 +1,18 @@
 ## The introduction to Reactive Programming you've been missing
 
+You probably opened this tutorial because you're curious in learning this new thing called Reactive Programming.
+
 Learning (Functional) Reactive Programming isn't the easiest thing. When I started learning, I tried looking for tutorials. I found only a handful practical guides, but they only scratched the surface and never tackled the challenge of building the whole architecture around FRP. Library documentations often don't help when you're trying to understand some tool. I mean, honestly, look at this:
 
 > **Rx.Observable.prototype.flatMapLatest(selector, [thisArg])**
 
 > Projects each element of an observable sequence into a new sequence of observable sequences by incorporating the element's index and then transforms an observable sequence of observable sequences into an observable sequence producing values only from the most recent observable sequence.
 
-I've read two books, one just 
+Holy cow.
+
+I've read two books, one just painted the big picture, while the other dived into the how to use the FRP library. I ended up learning Reactive Programming the hard way: figuring it out while building with it. At my work in [Futurice](https://www.futurice.com) I got to use it in a real project, and had the [support of some colleagues](http://blog.futurice.com/top-7-tips-for-rxjava-on-android) when I ran into troubles.
+
+The hardest part of the learning journey is **thinking in FRP**. It's a lot about letting go of old imperative and stateful habits of typical programming, and forcing your brain to working in a different dimension. I haven't found any guide on the internet in this aspect, and I think the world deserves a practical tutorial on how to think in FRP, so that you can get started. Library documentation can light your way after that. I hope this helps you.
 
 ### "What is Functional Reactive Programming (FRP)?"
 
