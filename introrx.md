@@ -12,7 +12,7 @@ In a way, this isn't anything new. Your typical click events are really an async
 
 If streams are so central to FRP, let's take a careful look at them, starting with our familiar "clicks on a button" event stream.
 
-![Click event stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/0a08a34878bf8d061a7b2530329a5c6d5e57ed1e/zclickstream.png)
+![Click event stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/49da694b2489f9e7b7276df31a1dcb206179a496/zclickstream.png)
 
 A stream is a sequence of **ongoing events ordered in time**. It can emit three different things: a value (of some type), an error, or a "completed" signal. Consider that the "completed" takes place, for instance, when the current window or view containing that button is closed.
 
