@@ -2,7 +2,7 @@
 
 You probably opened this tutorial because you're curious in learning this new thing called Reactive Programming.
 
-Learning (Functional) Reactive Programming isn't the easiest thing. When I started learning, I tried looking for tutorials. I found only a handful of practical guides, but they only scratched the surface and never tackled the challenge of building the whole architecture around FRP. Library documentations often don't help when you're trying to understand some tool. I mean, honestly, look at this:
+Learning (Functional) Reactive Programming is hard, even harder by the lack of good material. When I started learning, I tried looking for tutorials. I found only a handful of practical guides, but they just scratched the surface and never tackled the challenge of building the whole architecture around FRP. Library documentations often don't help when you're trying to understand some function. I mean, honestly, look at this:
 
 > **Rx.Observable.prototype.flatMapLatest(selector, [thisArg])**
 
@@ -10,19 +10,19 @@ Learning (Functional) Reactive Programming isn't the easiest thing. When I start
 
 Holy cow.
 
-I've read two books, one just painted the big picture, while the other dived into the how to use the FRP library. I ended up learning Reactive Programming the hard way: figuring it out while building with it. At my work in [Futurice](https://www.futurice.com) I got to use it in a real project, and had the [support of some colleagues](http://blog.futurice.com/top-7-tips-for-rxjava-on-android) when I ran into troubles.
+I've read two books, one just painted the big picture, while the other dived into how to use the FRP library. I ended up learning Reactive Programming the hard way: figuring it out while building with it. At my work in [Futurice](https://www.futurice.com) I got to use it in a real project, and had the [support of some colleagues](http://blog.futurice.com/top-7-tips-for-rxjava-on-android) when I ran into troubles.
 
-The hardest part of the learning journey is **thinking in FRP**. It's a lot about letting go of old imperative and stateful habits of typical programming, and forcing your brain to work in a different dimension. I haven't found any guide on the internet in this aspect, and I think the world deserves a practical tutorial on how to think in FRP, so that you can get started. Library documentation can light your way after that. I hope this helps you.
+The hardest part of the learning journey is **thinking in FRP**. It's a lot about letting go of old imperative and stateful habits of typical programming, and forcing your brain to work in a different paradigm. I haven't found any guide on the internet in this aspect, and I think the world deserves a practical tutorial on how to think in FRP, so that you can get started. Library documentation can light your way after that. I hope this helps you.
 
 ### "What is Functional Reactive Programming (FRP)?"
 
-**(You can skip this paragraph.)** There are plenty of bad explanations and definitions out there on the internet. [Wikipedia](https://en.wikipedia.org/wiki/Functional_reactive_programming) is too generic and theoretical as usual. [Stackoverflow](http://stackoverflow.com/questions/1028250/what-is-functional-reactive-programming)'s canonical answer is obviously not suitable for new comers. [Reactive Manifesto](http://www.reactivemanifesto.org/) sounds like the kind of thing you show to your project manager or the businessmen at your company. Microsoft's [Rx terminology](https://rx.codeplex.com/) "Rx = Observables + LINQ + Schedulers" is so heavy and Microsoftish that most of us are left confused. Terms like "reactive" and "propagation of change" don't convey anything specifically different to what your typical MV* and favorite language already does. Of course my framework views react to the models. Of course change is propagated. If it wouldn't, nothing would be rendered.
+(You can skip this paragraph.) There are plenty of bad explanations and definitions out there on the internet. [Wikipedia](https://en.wikipedia.org/wiki/Functional_reactive_programming) is too generic and theoretical as usual. [Stackoverflow](http://stackoverflow.com/questions/1028250/what-is-functional-reactive-programming)'s canonical answer is obviously not suitable for new comers. [Reactive Manifesto](http://www.reactivemanifesto.org/) sounds like the kind of thing you show to your project manager or the businessmen at your company. Microsoft's [Rx terminology](https://rx.codeplex.com/) "Rx = Observables + LINQ + Schedulers" is so heavy and Microsoftish that most of us are left confused. Terms like "reactive" and "propagation of change" don't convey anything specifically different to what your typical MV* and favorite language already does. Of course my framework views react to the models. Of course change is propagated. If it wouldn't, nothing would be rendered.
 
 So let's cut the bullshit. 
 
 #### FRP is programming with asynchronous event streams. 
 
-In a way, this isn't anything new. Your typical click events are really an asynchronous event stream, on which you can observe and do some side effects. FRP takes that idea and puts it on steroids. You are able to create data streams of anything, not just from click and hover events. Streams are cheap and ubiquitous, anything can be a stream: variables, user inputs, properties, caches, data structures, etc. For example, imagine your Twitter feed would be a data stream in the same fashion that click events are. You can listen to that stream and react accordingly.
+In a way, this isn't anything new. Your typical click events are really an asynchronous event stream, on which you can observe and do some side effects. FRP is that idea on steroids. You are able to create data streams of anything, not just from click and hover events. Streams are cheap and ubiquitous, anything can be a stream: variables, user inputs, properties, caches, data structures, etc. For example, imagine your Twitter feed would be a data stream in the same fashion that click events are. You can listen to that stream and react accordingly.
 
 **On top of that, you are given an amazing toolbox of functions to combine, create and filter any of those streams.** That's where the "functional" magic kicks in. A stream can be used as an input to another one. Even multiple streams can be used as inputs to another stream. You can _merge_ two streams. You can _filter_ a stream to get another one that has only those events you are interested in. You can _map_ data values from one stream to another new one.
 
@@ -59,8 +59,21 @@ Apps nowadays have an abundancy of real-time events of every kind that enable a 
 
 Let's dive into the real stuff. A real-world example with a step-by-step guide on how to think in FRP. No synthetic examples, no half-explained concepts. By the end of this tutorial we will have produced real functioning code, while knowing why we did each thing.
 
-I picked Javascript and RxJS as the tools for this, for a reason: Javascript is the most familiar language out there at the moment, and the Rx* library family is widely available for many languages (C#, Java, Javascript, Ruby, Python, C++). So whatever your tools are, you can concretely benefit by following this tutorial.
+I picked **Javascript** and **RxJS** as the tools for this, for a reason: Javascript is the most familiar language out there at the moment, and the Rx* library family is widely available for many languages (C#, Java, Javascript, Ruby, Python, C++, etc). So whatever your tools are, you can concretely benefit by following this tutorial.
 
 ### Implementing a "Who to follow" suggestions box in FRP
+
+In Twitter there's is this UI element that suggests other accounts you could follow:
+
+![Twitter Who to follow suggestions box](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/eb151a86fb9f6496937b9bd9758c3d4970a2e2e1/ztwitterbox.png)
+
+We are going to focus on imitating its core features, which are:
+
+* On startup, load accounts data from the API and display 3 suggestions
+* On clicking "Refresh", load other 3 account suggestions onto the 3 rows
+* On click 'x' button on an account row, clear only that current account and display another
+* Each row displays the account's avatar and links to their page
+
+We can leave out the other features and buttons because they are minor.
 
 http://jsfiddle.net/staltz/8jFJH/33
