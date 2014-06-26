@@ -31,5 +31,6 @@ But let's ignore code for now. Thinking in diagrams is the best way to understan
 
 Grey boxes are functions transforming one stream into another. First we accumulate clicks in lists, whenever 250 milliseconds of "event silence" has happened (the `buffer()` function). The result is a stream of lists, from which we apply `map()` to map each list to an integer matching the length of that list. Finally, we ignore `1` integers using the `filter(x >= 2)` function. That's it: 3 simple operations to produce our intended stream. We can then subscribe ("listen") to it to react accordingly how we wish. 
 
+I hope you enjoy the beauty of this approach. This example is just the tip of the iceberg: you can apply the same operations on different kinds of streams, for instance, on a stream of API responses; on the other hand, there are many other functions available.
 
 http://jsfiddle.net/staltz/8jFJH/33
