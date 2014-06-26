@@ -1,4 +1,4 @@
-# The introduction to Reactive Programming you've been missing
+## The introduction to Reactive Programming you've been missing
 
 ### What is Functional Reactive Programming (FRP)?
 
