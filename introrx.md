@@ -192,8 +192,8 @@ var responseStream = requestStream
 Nice. And because the response stream is defined according to request stream, if we have more events happening on request stream, we will have the corresponding response events happening on response stream, as expected.
 
 ```
-requestStream:  --a-----b-----c------|->
-responseStream: -----A-----B------C--|->
+requestStream:  --a-----b-----c--------|->
+responseStream: -----A-----B-------C---|->
 
 (lowercase is a request, uppercase is its response)
 ```
