@@ -179,7 +179,7 @@ Then we will have created a beast called "_metastream_": a stream of streams.
 Now, that looks confusing, and doesn't seem to help us at all. We just want a simple stream of responses, where each emitted value is a JSON object, not a 'Promise' of a JSON object. Say hi to Mr. Flatmap: a version of `map()` than "flattens" a metastream, by emitting on the "trunk" stream everything that will be emitted on "branch" streams.
 
 ```javascript
-var responseMetastream = requestStream
+var responseStream = requestStream
   .flatMap(function(requestUrl) {
     return Rx.Observable.create(function (observer) {
       // The Ajax Promise as before
