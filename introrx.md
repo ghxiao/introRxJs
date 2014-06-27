@@ -213,20 +213,13 @@ var requestStream = Rx.Observable.returnValue('https://api.github.com/users');
 
 var responseStream = requestStream
   .flatMap(function(requestUrl) {
-    return Rx.Observable.create(function (observer) {
-      $.ajax({url: url})
-      .then(function(response) { observer.onNext(response); })
-      .fail(function(jqXHR, status, error) { observer.onError(error); })
-      .done(function() { observer.onCompleted(); });
-    });
+    return Rx.Observable.fromPromise($.ajax({url: requestUrl}));
   });
 
 responseStream.subscribe(function(response) {
   // render `response` to the DOM however you wish
 });
 ```
-
-Until now, there is no benefit in solving this with FRP as compared to rendering inside the promise's `then()`. But as we add more features soon, it will be good to have these streams in place. Stay with me.
 
 ### The refresh button
 
