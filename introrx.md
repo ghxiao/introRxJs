@@ -34,6 +34,17 @@ A stream is a sequence of **ongoing events ordered in time**. It can emit three 
 
 We capture these emitted events only **asynchronously**, by defining a function that will execute when a value is emitted, another function when an error is emitted, and another function when 'completed' is emitted. Sometimes these last two can be omitted and you can just focus on defining the function for values. The "listening" to the stream is called **subscribing**. The functions we are defining are observers. This is precisely the [Observer Design Pattern](https://en.wikipedia.org/wiki/Observer_pattern).
 
+An alternative way of drawing that diagram is with ASCII, which we will use in some parts of this tutorial:
+```
+--a---b-c---d---X---|->
+
+a, b, c, d are emitted values
+X is an error
+| is the 'completed' signal
+---> is the timeline
+```
+
+
 Since this feels so familiar already, and I don't want you to get bored, let's do something new: we are going to create new click event streams transformed out of the original click event stream.
 
 Let's just say that you want to have a stream of "double click" events. To make it even more interesting, let's say we want the new stream to consider triple clicks as double clicks, or in general, multiple clicks (two or more). Take a deep breath and imagine how you would do that in a traditional imperative and stateful fashion. I bet it sounds fairly nasty and involves some variables to keep state and some fiddling with time intervals.
