@@ -189,4 +189,13 @@ var responseStream = requestStream
 
 ![Response stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/746a5e17328368bcba5dbd397b84fe8079eef7dd/zresponsestream.png)
 
+Nice. And because the response stream is defined according to request stream, if we have more events happening on request stream, we will have the corresponding response events happening on response stream, as expected.
+
+````
+requestStream:  --a-----b-----c------|->
+responseStream: -----A-----B------C--|->
+
+(lowercase is a request, uppercase is its response)
+```
+
 http://jsfiddle.net/staltz/8jFJH/34/
