@@ -20,9 +20,9 @@ The hardest part of the learning journey is **thinking in FRP**. It's a lot abou
 
 So let's cut the bullshit. 
 
-#### FRP is programming with asynchronous event streams. 
+#### FRP is programming with asynchronous data streams. 
 
-In a way, this isn't anything new. Your typical click events are really an asynchronous event stream, on which you can observe and do some side effects. FRP is that idea on steroids. You are able to create data streams of anything, not just from click and hover events. Streams are cheap and ubiquitous, anything can be a stream: variables, user inputs, properties, caches, data structures, etc. For example, imagine your Twitter feed would be a data stream in the same fashion that click events are. You can listen to that stream and react accordingly.
+In a way, this isn't anything new. Event buses or your typical click events are really an asynchronous event stream, on which you can observe and do some side effects. FRP is that idea on steroids. You are able to create data streams of anything, not just from click and hover events. Streams are cheap and ubiquitous, anything can be a stream: variables, user inputs, properties, caches, data structures, etc. For example, imagine your Twitter feed would be a data stream in the same fashion that click events are. You can listen to that stream and react accordingly.
 
 **On top of that, you are given an amazing toolbox of functions to combine, create and filter any of those streams.** That's where the "functional" magic kicks in. A stream can be used as an input to another one. Even multiple streams can be used as inputs to another stream. You can _merge_ two streams. You can _filter_ a stream to get another one that has only those events you are interested in. You can _map_ data values from one stream to another new one.
 
@@ -89,10 +89,12 @@ We can leave out the other features and buttons because they are minor. And, ins
 
 **How do you approach this problem with FRP?** Well, to start with, (almost) everything can be a stream. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simple about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream, and our responses as another stream. The rendering can be considered side effects when subscribing to the response stream.
 
-On startup we need to do only one request, so if we model it as a stream of events, it will be a stream with only emitted value.
+On startup we need to do only one request, so if we model it as a data stream, it will be a stream with only emitted value.
 
 ```
 -----a----->
+
+Where a is the string 'https://api.github.com/users'
 ```
 
 http://jsfiddle.net/staltz/8jFJH/33
