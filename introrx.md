@@ -143,7 +143,7 @@ requestStream.subscribe(function(requestUrl) {
 }
 ```
 
-What `Rx.Observable.create()` does is create your own custom stream by explicitly informing an observer (in other words, a "subscriber") about data events (`onNext()`) or errors (`onError()`). What we did was just wrap that jQuery Ajax Promise. Wait a second, does this mean that a Promise is an Observable?
+What `Rx.Observable.create()` does is create your own custom stream by explicitly informing an observer (in other words, a "subscriber") about data events (`onNext()`) or errors (`onError()`). What we did was just wrap that jQuery Ajax Promise. **Wait a second, does this mean that a Promise is an Observable?**
 
 ![Amazed](http://www.myfacewhen.net/uploads/3324-amazed-face.gif)
 
