@@ -204,5 +204,6 @@ Now that we finally have a response stream, we can finally render the data we re
 responseStream.subscribe(function(response) {
   // render `response` to the DOM however you wish
 });
+```
 
 http://jsfiddle.net/staltz/8jFJH/34/
