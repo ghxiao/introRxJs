@@ -191,11 +191,18 @@ var responseStream = requestStream
 
 Nice. And because the response stream is defined according to request stream, if we have more events happening on request stream, we will have the corresponding response events happening on response stream, as expected.
 
-````
+```
 requestStream:  --a-----b-----c------|->
 responseStream: -----A-----B------C--|->
 
 (lowercase is a request, uppercase is its response)
 ```
+
+Now that we finally have a response stream, we can finally render the data we receive:
+
+```javascript
+responseStream.subscribe(function(response) {
+  // render `response` to the DOM however you wish
+});
 
 http://jsfiddle.net/staltz/8jFJH/34/
