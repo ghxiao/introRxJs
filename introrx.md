@@ -86,7 +86,7 @@ We are going to focus on imitating its core features, which are:
 
 We can leave out the other features and buttons because they are minor. And, instead of Twitter, which recently closed it's API to the unauthorized public, let's build that UI for following people on Github. There's a [Github API for getting users](https://developer.github.com/v3/users/#get-all-users).
 
-**How do you approach this problem with FRP?** Well, to start with, (almost) everything can be a stream. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simply about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream, and our responses as another stream. The rendering can be considered side effects when subscribing to the response stream. At first this will feel like an overkill, but we need to start from the basics, right?
+**How do you approach this problem with FRP?** Well, to start with, (almost) everything can be a stream. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simply about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream. At first this will feel like an overkill, but we need to start from the basics, right?
 
 On startup we need to do only one request, so if we model it as a data stream, it will be a stream with only emitted value.
 
@@ -104,5 +104,15 @@ To create such stream with a single value is very simple in Rx*. The official te
 var requestStream = Rx.Observable.returnValue('https://api.github.com/users');
 ```
 
+But now, that is just a stream of strings, doing no other operation, so we need to somehow make something happen when that value is emitted. That's done by subscribing to the stream.
+
+```javascript
+requestStream.subscribe(function(requestUrl) {
+  // execute the request
+  jQuery.getJSON(requestUrl, function(data) {
+    // ...
+  });
+}
+```
 
 http://jsfiddle.net/staltz/8jFJH/34/
