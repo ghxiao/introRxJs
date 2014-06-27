@@ -223,4 +223,4 @@ responseStream.subscribe(function(response) {
 
 ### The refresh button
 
-http://jsfiddle.net/staltz/8jFJH/34/
+http://jsfiddle.net/staltz/8jFJH/35
