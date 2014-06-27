@@ -198,7 +198,7 @@ responseStream: -----A-----B------C--|->
 (lowercase is a request, uppercase is its response)
 ```
 
-Now that we finally have a response stream, we can finally render the data we receive:
+Now that we finally have a response stream, we can render the data we receive:
 
 ```javascript
 responseStream.subscribe(function(response) {
