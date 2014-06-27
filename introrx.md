@@ -76,4 +76,12 @@ We are going to focus on imitating its core features, which are:
 
 We can leave out the other features and buttons because they are minor.
 
+**How do you approach this problem with FRP?** Well, to start with, (almost) everything can be a stream. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simple about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream, and our responses as another stream. The rendering can be considered side effects when subscribing to the response stream.
+
+On startup we need to do only one request, so if we model it as a stream of events, it will be a stream with only emitted value.
+
+```
+-----a----->
+```
+
 http://jsfiddle.net/staltz/8jFJH/33
