@@ -117,7 +117,7 @@ requestStream.subscribe(function(requestUrl) {
 }
 ```
 
-Notice we are using jQuery to handle the asynchronicity of the request operation. But wait a moment, FRP is for dealing with **asynchronous** data streams. Couldn't the response for that request be a stream containing the data arriving at some time in the future? Well, at a conceptual level, it sure looks like, so let's try that.
+Notice we are using a jQuery Ajax callback to handle the asynchronicity of the request operation. But wait a moment, FRP is for dealing with **asynchronous** data streams. Couldn't the response for that request be a stream containing the data arriving at some time in the future? Well, at a conceptual level, it sure looks like, so let's try that.
 
 ```javascript
 requestStream.subscribe(function(requestUrl) {
