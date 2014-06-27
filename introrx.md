@@ -1,8 +1,8 @@
 ## The introduction to Reactive Programming you've been missing
 
-You probably opened this tutorial because you're curious in learning this new thing called Reactive Programming.
+So you're curious in learning this new thing called (Functional) Reactive Programming (FRP).
 
-Learning (Functional) Reactive Programming is hard, even harder by the lack of good material. When I started learning, I tried looking for tutorials. I found only a handful of practical guides, but they just scratched the surface and never tackled the challenge of building the whole architecture around FRP. Library documentations often don't help when you're trying to understand some function. I mean, honestly, look at this:
+Learning it is hard, even harder by the lack of good material. When I started, I tried looking for tutorials. I found only a handful of practical guides, but they just scratched the surface and never tackled the challenge of building the whole architecture around it. Library documentations often don't help when you're trying to understand some function. I mean, honestly, look at this:
 
 > **Rx.Observable.prototype.flatMapLatest(selector, [thisArg])**
 
@@ -88,19 +88,19 @@ We can leave out the other features and buttons because they are minor. And, ins
 
 ### Request and response
 
-**How do you approach this problem with FRP?** Well, to start with, (almost) everything can be a stream. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simply about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream. At first this will feel like an overkill, but we need to start from the basics, right?
+**How do you approach this problem with FRP?** Well, to start with, (almost) _everything can be a stream_. That's the FRP mantra. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simply about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream. At first this will feel like an overkill, but we need to start from the basics, right?
 
 On startup we need to do only one request, so if we model it as a data stream, it will be a stream with only one emitted value.
 
 ```
--a-------|->
+--a------|->
 
 Where a is the string 'https://api.github.com/users'
 ```
 
 This is a stream of URLs that we want to request. Whenever a request event happens, it tells us two things: when and what. "When" the request should be executed is when the event is emitted. And "what" should be requested is the value emitted: a string containing the URL.
 
-To create such stream with a single value is very simple in Rx*. The official terminology for a stream is "Observable", for the fact that it can be observed, but I find it to be a silly name, so I call it stream.
+To create such stream with a single value is very simple in Rx*. The official terminology for a stream is "Observable", for the fact that it can be observed, but I find it to be a silly name, so I call it _stream_.
 
 ```javascript
 var requestStream = Rx.Observable.returnValue('https://api.github.com/users');
@@ -143,7 +143,7 @@ requestStream.subscribe(function(requestUrl) {
 }
 ```
 
-What `Rx.Observable.create()` does is create your own custom stream by explicitly informing each observer (or in other words, a "subscriber") about data events (`onNext()`) or errors (`onError()`). What we did was just wrap that jQuery Ajax Promise. **Wait a second, does this mean that a Promise is an Observable?**
+What `Rx.Observable.create()` does is create your own custom stream by explicitly informing each observer (or in other words, a "subscriber") about data events (`onNext()`) or errors (`onError()`). What we did was just wrap that jQuery Ajax Promise. **Excuse me, does this mean that a Promise is an Observable?**
 
 &nbsp;
 &nbsp;
@@ -173,5 +173,61 @@ var responseMetastream = requestStream
 ```
 
 Then we will have created a beast called "_metastream_": a stream of streams.
+
+![Response metastream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/29a555a0088f60a2d2407cab0b0dff968ce0410d/zresponsemetastream.png)
+
+Now, that looks confusing, and doesn't seem to help us at all. We just want a simple stream of responses, where each emitted value is a JSON object, not a 'Promise' of a JSON object. Say hi to Mr. Flatmap: a version of `map()` than "flattens" a metastream, by emitting on the "trunk" stream everything that will be emitted on "branch" streams.
+
+```javascript
+var responseStream = requestStream
+  .flatMap(function(requestUrl) {
+    return Rx.Observable.create(function (observer) {
+      // The Ajax Promise as before
+    });
+  });
+```
+
+![Response stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/746a5e17328368bcba5dbd397b84fe8079eef7dd/zresponsestream.png)
+
+Nice. And because the response stream is defined according to request stream, if we have more events happening on request stream, we will have the corresponding response events happening on response stream, as expected.
+
+```
+requestStream:  --a-----b-----c------|->
+responseStream: -----A-----B------C--|->
+
+(lowercase is a request, uppercase is its response)
+```
+
+Now that we finally have a response stream, we can finally render the data we receive:
+
+```javascript
+responseStream.subscribe(function(response) {
+  // render `response` to the DOM however you wish
+});
+```
+
+Joining all the code until now, we have:
+
+```javascript
+var requestStream = Rx.Observable.returnValue('https://api.github.com/users');
+
+var responseStream = requestStream
+  .flatMap(function(requestUrl) {
+    return Rx.Observable.create(function (observer) {
+      $.ajax({url: url})
+      .then(function(response) { observer.onNext(response); })
+      .fail(function(jqXHR, status, error) { observer.onError(error); })
+      .done(function() { observer.onCompleted(); });
+    });
+  });
+
+responseStream.subscribe(function(response) {
+  // render `response` to the DOM however you wish
+});
+```
+
+Until now, there is no benefit in solving this with FRP as compared to rendering inside the promise's `then()`. But as we add more features soon, it will be good to have these streams in place. Stay with me.
+
+### The refresh button
 
 http://jsfiddle.net/staltz/8jFJH/34/
