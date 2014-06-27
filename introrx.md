@@ -226,4 +226,6 @@ responseStream.subscribe(function(response) {
 });
 ```
 
+Until now, there is no benefit in solving this with FRP as compared to rendering inside the promise's `then()`. But as we add more features soon, it will be good to have these streams in place. Stay with me.
+
 http://jsfiddle.net/staltz/8jFJH/34/
