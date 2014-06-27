@@ -93,7 +93,7 @@ We can leave out the other features and buttons because they are minor. And, ins
 On startup we need to do only one request, so if we model it as a data stream, it will be a stream with only one emitted value.
 
 ```
--a-------|->
+--a------|->
 
 Where a is the string 'https://api.github.com/users'
 ```
