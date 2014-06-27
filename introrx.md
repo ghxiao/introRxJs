@@ -88,7 +88,7 @@ We can leave out the other features and buttons because they are minor. And, ins
 
 ### Request and response
 
-**How do you approach this problem with FRP?** Well, to start with, (almost) everything can be a stream. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simply about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream. At first this will feel like an overkill, but we need to start from the basics, right?
+**How do you approach this problem with FRP?** Well, to start with, (almost) _everything can be a stream_. That's the FRP mantra. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simply about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream. At first this will feel like an overkill, but we need to start from the basics, right?
 
 On startup we need to do only one request, so if we model it as a data stream, it will be a stream with only one emitted value.
 
