@@ -149,6 +149,6 @@ What `Rx.Observable.create()` does is create your own custom stream by explicitl
 
 Yes.
 
-Observable is Promise++. In Rx you can easily convert a Promise to an Observable by doing `var stream = Rx.Observable.fromPromise(promise)`. The only difference is that Observables are not compliant with [Promises/A+](http://promises-aplus.github.io/promises-spec/), but conceptually there is no clash. A Promise is simply an Observable with one single emitted value (the `onNext` value). FRP streams go beyond promises by allowing many returned values.
+Observable is Promise++. In Rx you can easily convert a Promise to an Observable by doing `var stream = Rx.Observable.fromPromise(promise)`. The only difference is that Observables are not compliant with [Promises/A+](http://promises-aplus.github.io/promises-spec/), but conceptually there is no clash. A Promise is simply an Observable with one single emitted value. FRP streams go beyond promises by allowing many returned values.
 
 http://jsfiddle.net/staltz/8jFJH/34/
