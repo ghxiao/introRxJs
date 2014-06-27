@@ -1,8 +1,8 @@
 ## The introduction to Reactive Programming you've been missing
 
-So you're curious in learning this new thing called Reactive Programming.
+So you're curious in learning this new thing called (Functional) Reactive Programming (FRP).
 
-Learning it is hard, even harder by the lack of good material. When I started, I tried looking for tutorials. I found only a handful of practical guides, but they just scratched the surface and never tackled the challenge of building the whole architecture around FRP. Library documentations often don't help when you're trying to understand some function. I mean, honestly, look at this:
+Learning it is hard, even harder by the lack of good material. When I started, I tried looking for tutorials. I found only a handful of practical guides, but they just scratched the surface and never tackled the challenge of building the whole architecture around it. Library documentations often don't help when you're trying to understand some function. I mean, honestly, look at this:
 
 > **Rx.Observable.prototype.flatMapLatest(selector, [thisArg])**
 
