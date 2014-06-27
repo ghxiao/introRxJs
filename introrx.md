@@ -44,7 +44,6 @@ X is an error
 ---> is the timeline
 ```
 
-
 Since this feels so familiar already, and I don't want you to get bored, let's do something new: we are going to create new click event streams transformed out of the original click event stream.
 
 Let's just say that you want to have a stream of "double click" events. To make it even more interesting, let's say we want the new stream to consider triple clicks as double clicks, or in general, multiple clicks (two or more). Take a deep breath and imagine how you would do that in a traditional imperative and stateful fashion. I bet it sounds fairly nasty and involves some variables to keep state and some fiddling with time intervals.
@@ -62,7 +61,7 @@ I hope you enjoy the beauty of this approach. This example is just the tip of th
 
 FRP raises the level of abstraction of your code so you can focus on the interdependence of events that define the business logic, rather than having to constantly fiddle with a large amount of implementation details. Code with FRP will likely be more concise.
 
-The benefit is more evident in modern webapps and mobile apps, that are highly interactive with a multitude of UI events related to data events. 10 years ago, interaction with web pages was basically about submitting a long form to the backend and performing simple rendering to the frontend. Apps have evolved to be more real-time: modifying a single form field can automatically trigger a save to the backend, "likes" to some content can be reflected in real time to other connected users, and so forth.
+The benefit is more evident in modern webapps and mobile apps that are highly interactive with a multitude of UI events related to data events. 10 years ago, interaction with web pages was basically about submitting a long form to the backend and performing simple rendering to the frontend. Apps have evolved to be more real-time: modifying a single form field can automatically trigger a save to the backend, "likes" to some content can be reflected in real time to other connected users, and so forth.
 
 Apps nowadays have an abundancy of real-time events of every kind that enable a highly interactive experience to the user. We need tools for properly dealing with that, and Functional Reactive Programming is the answer.
 
@@ -87,7 +86,7 @@ We are going to focus on imitating its core features, which are:
 
 We can leave out the other features and buttons because they are minor. And, instead of Twitter, which recently closed it's API to the unauthorized public, let's build that UI for following people on Github. There's a [Github API for getting users](https://developer.github.com/v3/users/#get-all-users).
 
-**How do you approach this problem with FRP?** Well, to start with, (almost) everything can be a stream. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simple about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream, and our responses as another stream. The rendering can be considered side effects when subscribing to the response stream.
+**How do you approach this problem with FRP?** Well, to start with, (almost) everything can be a stream. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simply about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream, and our responses as another stream. The rendering can be considered side effects when subscribing to the response stream. At first this will feel like an overkill, but we need to start from the basics, right?
 
 On startup we need to do only one request, so if we model it as a data stream, it will be a stream with only emitted value.
 
@@ -96,5 +95,7 @@ On startup we need to do only one request, so if we model it as a data stream, i
 
 Where a is the string 'https://api.github.com/users'
 ```
+
+This is a stream of URLs that we want to request. Whenever a request event happens, it tells us two things: when and what. "When" the request should be executed is when the event is emitted. And "what" should be requested is the value emitted: a string with the URL.
 
 http://jsfiddle.net/staltz/8jFJH/33
