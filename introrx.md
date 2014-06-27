@@ -206,4 +206,24 @@ responseStream.subscribe(function(response) {
 });
 ```
 
+Joining all the code until now, we have:
+
+```javascript
+var requestStream = Rx.Observable.returnValue('https://api.github.com/users');
+
+var responseStream = requestStream
+  .flatMap(function(requestUrl) {
+    return Rx.Observable.create(function (observer) {
+      $.ajax({url: url})
+      .then(function(response) { observer.onNext(response); })
+      .fail(function(jqXHR, status, error) { observer.onError(error); })
+      .done(function() { observer.onCompleted(); });
+    });
+  });
+
+responseStream.subscribe(function(response) {
+  // render `response` to the DOM however you wish
+});
+```
+
 http://jsfiddle.net/staltz/8jFJH/34/
