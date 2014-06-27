@@ -225,4 +225,4 @@ responseStream.subscribe(function(response) {
 
 .... the response is actually a list of users, from which we just use 3, to render....
 
-http://jsfiddle.net/staltz/8jFJH/35
+http://jsfiddle.net/staltz/8jFJH/36
