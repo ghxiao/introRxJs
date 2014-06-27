@@ -100,7 +100,7 @@ Where a is the string 'https://api.github.com/users'
 
 This is a stream of URLs that we want to request. Whenever a request event happens, it tells us two things: when and what. "When" the request should be executed is when the event is emitted. And "what" should be requested is the value emitted: a string containing the URL.
 
-To create such stream with a single value is very simple in Rx*. The official terminology for a stream is "Observable", for the fact that it can be observed, but I find it to be a silly name, so I call it stream.
+To create such stream with a single value is very simple in Rx*. The official terminology for a stream is "Observable", for the fact that it can be observed, but I find it to be a silly name, so I call it _stream_.
 
 ```javascript
 var requestStream = Rx.Observable.returnValue('https://api.github.com/users');
