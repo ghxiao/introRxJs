@@ -174,8 +174,7 @@ var responseMetastream = requestStream
 
 Then we will have created a beast called "_metastream_": a stream of streams.
 
-
-[Response metastream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/29a555a0088f60a2d2407cab0b0dff968ce0410d/zresponsemetastream.png)
+![Response metastream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/29a555a0088f60a2d2407cab0b0dff968ce0410d/zresponsemetastream.png)
 
 Now, that looks confusing, and doesn't seem to help us at all. We just want a simple stream of responses, where each emitted value is a JSON object, not a 'Promise' of a JSON object. Say hi to Mr. Flatmap: a version of `map()` than "flattens" a metastream, by emitting on the "trunk" stream everything that will be emitted on "branch" streams.
 
@@ -188,6 +187,6 @@ var responseMetastream = requestStream
   });
 ```
 
-[Response stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/746a5e17328368bcba5dbd397b84fe8079eef7dd/zresponsestream.png)
+![Response stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/746a5e17328368bcba5dbd397b84fe8079eef7dd/zresponsestream.png)
 
 http://jsfiddle.net/staltz/8jFJH/34/
