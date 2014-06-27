@@ -159,4 +159,19 @@ Observable is Promise++. In Rx you can easily convert a Promise to an Observable
 
 This is pretty nice, and shows how FRP is at least as powerful as Promises. So if you believe the Promises hype, keep an eye on what FRP is capable of.
 
+Now back to our example, if you were quick to notice, we have one `subscribe()` call inside another, which is somewhat akin to callback hell. Also, the creation of `responseStream` is dependent on `requestStream`. As you heard before, in FRP there are simple mechanisms for transforming and creating new streams out of others, so we should be doing that. 
+
+The one basic function that you should know by now is `map(f)`, which takes each value of stream A, applies `f()` on it, and produces a value on stream B. If we do that to our request and response streams, we can map request URLs to response Promises (disguised as streams). 
+
+```javascript
+var responseMetastream = requestStream
+  .map(function(requestUrl) {
+    return Rx.Observable.create(function (observer) {
+      // The Ajax Promise as before
+    });
+  });
+```
+
+Then we will have created a beast called "_metastream_": a stream of streams.
+
 http://jsfiddle.net/staltz/8jFJH/34/
