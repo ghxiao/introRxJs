@@ -86,6 +86,8 @@ We are going to focus on imitating its core features, which are:
 
 We can leave out the other features and buttons because they are minor. And, instead of Twitter, which recently closed it's API to the unauthorized public, let's build that UI for following people on Github. There's a [Github API for getting users](https://developer.github.com/v3/users/#get-all-users).
 
+### Request and response
+
 **How do you approach this problem with FRP?** Well, to start with, (almost) everything can be a stream. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simply about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream. At first this will feel like an overkill, but we need to start from the basics, right?
 
 On startup we need to do only one request, so if we model it as a data stream, it will be a stream with only emitted value.
@@ -111,6 +113,32 @@ requestStream.subscribe(function(requestUrl) {
   // execute the request
   jQuery.getJSON(requestUrl, function(data) {
     // ...
+  });
+}
+```
+
+Notice we are using jQuery to handle the asynchronicity of the request operation. But wait a moment, FRP is for dealing with **asynchronous** data streams. Couldn't the response for that request be a stream containing the data arriving at some time in the future? Well, at a conceptual level, it sure looks like, so let's try that.
+
+```javascript
+requestStream.subscribe(function(requestUrl) {
+  var responseStream = Rx.Observable.create(function(observer) {
+    $.ajax({
+      url: requestUrl,
+        success: function (response) {
+            observer.onNext(response);
+        },
+        error: function (jqXHR, status, error) {
+            observer.onError(error);
+        },
+        complete: function () {
+            observer.onCompleted();
+        }
+      });
+    });
+  }
+  
+  responseStream.subscribe(function(response) {
+    // do something with the response
   });
 }
 ```
