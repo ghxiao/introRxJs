@@ -91,11 +91,18 @@ We can leave out the other features and buttons because they are minor. And, ins
 On startup we need to do only one request, so if we model it as a data stream, it will be a stream with only emitted value.
 
 ```
------a----->
+-----a---|->
 
 Where a is the string 'https://api.github.com/users'
 ```
 
 This is a stream of URLs that we want to request. Whenever a request event happens, it tells us two things: when and what. "When" the request should be executed is when the event is emitted. And "what" should be requested is the value emitted: a string containing the URL.
 
-http://jsfiddle.net/staltz/8jFJH/33
+To create such stream with a single value is very simple in Rx*.
+
+```javascript
+var requestStream = Rx.Observable.returnValue('https://api.github.com/users');
+```
+
+
+http://jsfiddle.net/staltz/8jFJH/34/
