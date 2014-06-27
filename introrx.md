@@ -121,26 +121,34 @@ Notice we are using jQuery to handle the asynchronicity of the request operation
 
 ```javascript
 requestStream.subscribe(function(requestUrl) {
-  var responseStream = Rx.Observable.create(function(observer) {
-    $.ajax({
-      url: requestUrl,
-        success: function (response) {
-            observer.onNext(response);
-        },
-        error: function (jqXHR, status, error) {
-            observer.onError(error);
-        },
-        complete: function () {
-            observer.onCompleted();
-        }
+  // execute the request
+  var responseStream = Rx.Observable.create(function (observer) {
+      $.ajax({
+        url: url
+      })
+      .then(function(response) {
+        observer.onNext(response);
+      })
+      .fail(function(jqXHR, status, error) {
+        observer.onError(error);
+      })
+      .done(function() {
+        observer.onCompleted();
       });
-    });
-  }
+  });
   
   responseStream.subscribe(function(response) {
     // do something with the response
   });
 }
 ```
+
+What `Rx.Observable.create()` does is create your own custom stream by explicitly informing an observer (in other words, a "subscriber") about data events (`onNext()`) or errors (`onError()`). What we did was just wrap that jQuery Ajax Promise. Wait a second, does this mean that a Promise is an Observable?
+
+![Amazed](http://www.myfacewhen.net/uploads/3324-amazed-face.gif)
+
+Yes.
+
+Observable is Promise++. In Rx you can easily convert a Promise to an Observable by doing `var stream = Rx.Observable.fromPromise(promise)`. The only difference is that Observables are not compliant with [Promises/A+](http://promises-aplus.github.io/promises-spec/), but conceptually there is no clash. A Promise is simply an Observable with one single emitted value (the `onNext` value). FRP streams go beyond promises by allowing many returned values.
 
 http://jsfiddle.net/staltz/8jFJH/34/
