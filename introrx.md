@@ -74,7 +74,7 @@ We are going to focus on imitating its core features, which are:
 * On click 'x' button on an account row, clear only that current account and display another
 * Each row displays the account's avatar and links to their page
 
-We can leave out the other features and buttons because they are minor.
+We can leave out the other features and buttons because they are minor. And, instead of Twitter, which recently closed it's API to the unauthorized public, let's build that UI for following people on Github. There's a [Github API for getting users](https://developer.github.com/v3/users/#get-all-users).
 
 **How do you approach this problem with FRP?** Well, to start with, (almost) everything can be a stream. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simple about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream, and our responses as another stream. The rendering can be considered side effects when subscribing to the response stream.
 
