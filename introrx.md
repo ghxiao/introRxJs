@@ -96,6 +96,6 @@ On startup we need to do only one request, so if we model it as a data stream, i
 Where a is the string 'https://api.github.com/users'
 ```
 
-This is a stream of URLs that we want to request. Whenever a request event happens, it tells us two things: when and what. "When" the request should be executed is when the event is emitted. And "what" should be requested is the value emitted: a string with the URL.
+This is a stream of URLs that we want to request. Whenever a request event happens, it tells us two things: when and what. "When" the request should be executed is when the event is emitted. And "what" should be requested is the value emitted: a string containing the URL.
 
 http://jsfiddle.net/staltz/8jFJH/33
