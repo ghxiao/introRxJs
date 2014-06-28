@@ -330,9 +330,17 @@ No, not so fast, pal. Remember the FRP mantra?
 &nbsp;
 &nbsp;
 &nbsp;
-&nbsp;
 
 ![Mantra](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/796be9b66ff7ce58b90e65a49e3b9832b862dedd/zmantra.jpg)
 
+So let's model a suggestion as a stream, where each emitted value is the JSON object containing the suggestion data. We will do this separately for each of the 3 suggestions. This is how the stream for suggestion #1 could look like:
+
+```javascript
+var suggestion1Stream = responseStream
+  .map(function(listUsers) {
+    // get one random user from the list
+    return listUsers[Math.floor(Math.random()*listUsers.length)];
+  });
+```
 
 http://jsfiddle.net/staltz/8jFJH/36
