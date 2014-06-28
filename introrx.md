@@ -223,6 +223,25 @@ responseStream.subscribe(function(response) {
 
 ### The refresh button
 
-.... the response is actually a list of users, from which we just use 3, to render....
+I didn't mention that the JSON in the response is a list with 100 users. The API only allows us to specify the page offset, and not the page size, so we're using just 3 data objects and wasting 97 others. We can ignore that problem for now, since later on we will see how to cache results for later usage.
+
+Everytime the refresh button is clicked, the request stream should emit a new value, so that we can get a new response. We need two things: a stream of click events on the refresh button (mantra: anything can be a stream), and we need to change the request stream to depend on the refresh click stream. Glady, RxJS comes with tools to make Observables from event listener.
+
+```javascript
+var refreshButton = document.querySelector('.refresh');
+var refreshClickStream = Rx.Observable.fromEvent(refreshButton, 'click');
+```
+
+Since the refresh click event doesn't itself carry any API URL, we need to map each click an actual URL. Now we change the request stream to be the refresh click stream mapped to the API endpoint with a random offset parameter each time.
+
+```javascript
+var requestStream = refreshClickStream
+  .map(function() {
+      var randomOffset = Math.floor(Math.random()*500);
+      return 'https://api.github.com/users?since=' + randomOffset;
+  });
+```
+
+... introduce suggestion1Stream
 
 http://jsfiddle.net/staltz/8jFJH/36
