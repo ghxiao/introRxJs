@@ -324,7 +324,7 @@ refreshClickStream.subscribe(function() {
 });
 ```
 
-No, not so fast, pal. This is bad, because we now have **two** subscribers that affect the suggestion DOM elements, and that doesn't really sound like [Separation of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns). Remember the FRP mantra? 
+No, not so fast, pal. This is bad, because we now have **two** subscribers that affect the suggestion DOM elements (the other one being `responseStream.subscribe()`), and that doesn't really sound like [Separation of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns). Remember the FRP mantra? 
 
 &nbsp;
 &nbsp;
