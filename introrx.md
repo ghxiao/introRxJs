@@ -302,7 +302,17 @@ var requestStream = refreshClickStream
   .startWith('https://api.github.com/users');
 ```
 
-The `startWith()` function does exactly what you think it does. No matter how your input stream looks like, the output stream resulting of `startWith(x)` will have `x` at the beginning.
+The `startWith()` function does exactly what you think it does. No matter how your input stream looks like, the output stream resulting of `startWith(x)` will have `x` at the beginning. But I'm not [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) enough, I'm repeating the API endpoint string. One way to fix this is by moving the `startWith()` close to the `refreshClickStream`, to essentially "emulate" a refresh click on startup.  
+
+```javascript
+var requestStream = refreshClickStream.startWith('startup')
+  .map(function() {
+      var randomOffset = Math.floor(Math.random()*500);
+      return 'https://api.github.com/users?since=' + randomOffset;
+  });
+```
+
+Nice. Take some time to enjoy the beauty of this.
 
 ... introduce suggestion1Stream
 
