@@ -106,7 +106,7 @@ To create such stream with a single value is very simple in Rx*. The official te
 var requestStream = Rx.Observable.returnValue('https://api.github.com/users');
 ```
 
-But now, that is just a stream of strings, doing no other operation, so we need to somehow make something happen when that value is emitted. That's done by subscribing to the stream.
+But now, that is just a stream of strings, doing no other operation, so we need to somehow make something happen when that value is emitted. That's done by [subscribing](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md#rxobservableprototypesubscribeobserver--onnext-onerror-oncompleted) to the stream.
 
 ```javascript
 requestStream.subscribe(function(requestUrl) {
@@ -143,7 +143,7 @@ requestStream.subscribe(function(requestUrl) {
 }
 ```
 
-What `Rx.Observable.create()` does is create your own custom stream by explicitly informing each observer (or in other words, a "subscriber") about data events (`onNext()`) or errors (`onError()`). What we did was just wrap that jQuery Ajax Promise. **Excuse me, does this mean that a Promise is an Observable?**
+What [`Rx.Observable.create()`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md#rxobservablecreatesubscribe) does is create your own custom stream by explicitly informing each observer (or in other words, a "subscriber") about data events (`onNext()`) or errors (`onError()`). What we did was just wrap that jQuery Ajax Promise. **Excuse me, does this mean that a Promise is an Observable?**
 
 &nbsp;
 &nbsp;
@@ -161,7 +161,7 @@ This is pretty nice, and shows how FRP is at least as powerful as Promises. So i
 
 Now back to our example, if you were quick to notice, we have one `subscribe()` call inside another, which is somewhat akin to callback hell. Also, the creation of `responseStream` is dependent on `requestStream`. As you heard before, in FRP there are simple mechanisms for transforming and creating new streams out of others, so we should be doing that. 
 
-The one basic function that you should know by now is `map(f)`, which takes each value of stream A, applies `f()` on it, and produces a value on stream B. If we do that to our request and response streams, we can map request URLs to response Promises (disguised as streams). 
+The one basic function that you should know by now is [`map(f)`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md#rxobservableprototypemapselector-thisarg), which takes each value of stream A, applies `f()` on it, and produces a value on stream B. If we do that to our request and response streams, we can map request URLs to response Promises (disguised as streams). 
 
 ```javascript
 var responseMetastream = requestStream
@@ -176,7 +176,7 @@ Then we will have created a beast called "_metastream_": a stream of streams.
 
 ![Response metastream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/e8fd1bb6bd93533cf8afae42bdf19bdff92fbc2c/zresponsemetastream.png)
 
-Now, that looks confusing, and doesn't seem to help us at all. We just want a simple stream of responses, where each emitted value is a JSON object, not a 'Promise' of a JSON object. Say hi to Mr. Flatmap: a version of `map()` than "flattens" a metastream, by emitting on the "trunk" stream everything that will be emitted on "branch" streams.
+Now, that looks confusing, and doesn't seem to help us at all. We just want a simple stream of responses, where each emitted value is a JSON object, not a 'Promise' of a JSON object. Say hi to [Mr. Flatmap](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md#rxobservableprototypeflatmapselector-resultselector): a version of `map()` than "flattens" a metastream, by emitting on the "trunk" stream everything that will be emitted on "branch" streams.
 
 ```javascript
 var responseStream = requestStream
@@ -189,7 +189,7 @@ var responseStream = requestStream
 
 ![Response stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/746a5e17328368bcba5dbd397b84fe8079eef7dd/zresponsestream.png)
 
-Nice. And because the response stream is defined according to request stream, if we have more events happening on request stream, we will have the corresponding response events happening on response stream, as expected.
+Nice. And because the response stream is defined according to request stream, **if** we have later on more events happening on request stream, we will have the corresponding response events happening on response stream, as expected:
 
 ```
 requestStream:  --a-----b--c------------|->
@@ -223,16 +223,16 @@ responseStream.subscribe(function(response) {
 
 ### The refresh button
 
-I didn't mention that the JSON in the response is a list with 100 users. The API only allows us to specify the page offset, and not the page size, so we're using just 3 data objects and wasting 97 others. We can ignore that problem for now, since later on we will see how to cache results for later usage.
+I did not yet mention that the JSON in the response is a list with 100 users. The API only allows us to specify the page offset, and not the page size, so we're using just 3 data objects and wasting 97 others. We can ignore that problem for now, since later on we will see how to cache results for later usage.
 
-Everytime the refresh button is clicked, the request stream should emit a new value, so that we can get a new response. We need two things: a stream of click events on the refresh button (mantra: anything can be a stream), and we need to change the request stream to depend on the refresh click stream. Glady, RxJS comes with tools to make Observables from event listeners.
+Everytime the refresh button is clicked, the request stream should emit a new URL, so that we can get a new response. We need two things: a stream of click events on the refresh button (mantra: anything can be a stream), and we need to change the request stream to depend on the refresh click stream. Glady, RxJS comes with tools to make Observables from event listeners.
 
 ```javascript
 var refreshButton = document.querySelector('.refresh');
 var refreshClickStream = Rx.Observable.fromEvent(refreshButton, 'click');
 ```
 
-Since the refresh click event doesn't itself carry any API URL, we need to map each click an actual URL. Now we change the request stream to be the refresh click stream mapped to the API endpoint with a random offset parameter each time.
+Since the refresh click event doesn't itself carry any API URL, we need to map each click to an actual URL. Now we change the request stream to be the refresh click stream mapped to the API endpoint with a random offset parameter each time.
 
 ```javascript
 var requestStream = refreshClickStream
@@ -256,7 +256,7 @@ var requestOnRefreshStream = refreshClickStream
 var startupRequestStream = Rx.Observable.returnValue('https://api.github.com/users');
 ```
 
-But how can we "merge" these two into one? Well, there's **merge()**. Explained in the diagram dialect, this is what it does:
+But how can we "merge" these two into one? Well, there's [`merge()`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md#rxobservableprototypemergemaxconcurrent--other). Explained in the diagram dialect, this is what it does:
 
 ```
 stream A: ---a--------e-----o----->
@@ -302,7 +302,7 @@ var requestStream = refreshClickStream
   .startWith('https://api.github.com/users');
 ```
 
-The `startWith()` function does exactly what you think it does. No matter how your input stream looks like, the output stream resulting of `startWith(x)` will have `x` at the beginning. But I'm not [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) enough, I'm repeating the API endpoint string. One way to fix this is by moving the `startWith()` close to the `refreshClickStream`, to essentially "emulate" a refresh click on startup.  
+The [`startWith()`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md#rxobservableprototypestartwithscheduler-args) function does exactly what you think it does. No matter how your input stream looks like, the output stream resulting of `startWith(x)` will have `x` at the beginning. But I'm not [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) enough, I'm repeating the API endpoint string. One way to fix this is by moving the `startWith()` close to the `refreshClickStream`, to essentially "emulate" a refresh click on startup.  
 
 ```javascript
 var requestStream = refreshClickStream.startWith('fake click')
@@ -316,7 +316,7 @@ Nice. If you go back to the point where I "broke the automated tests", you shoul
 
 ### Modelling the 3 suggestions with streams
 
-Until now, we have only touched a _suggestion_ UI element on the rendering step that happens in the responseStream `subscribe()`. Now with the refresh button, we have a problem: as soon as you click 'refresh', the current 3 suggestions are not cleared. New suggestions come in after a response has arrived, but to make the UI look nice, we need to clean out the current suggestions when clicks happen on the refresh.
+Until now, we have only touched a _suggestion_ UI element on the rendering step that happens in the responseStream's `subscribe()`. Now with the refresh button, we have a problem: as soon as you click 'refresh', the current 3 suggestions are not cleared. New suggestions come in only after a response has arrived, but to make the UI look nice, we need to clean out the current suggestions when clicks happen on the refresh.
 
 ```javascript
 refreshClickStream.subscribe(function() {
@@ -325,6 +325,8 @@ refreshClickStream.subscribe(function() {
 ```
 
 No, not so fast, pal. Remember the FRP mantra? 
+
+![Mantra](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/499500e74bb7af748af5ff1e2a6132e898a005d4/zmantra.jpg)
 
 
 http://jsfiddle.net/staltz/8jFJH/36
