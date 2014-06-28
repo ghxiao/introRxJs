@@ -312,7 +312,7 @@ var requestStream = refreshClickStream.startWith('startup')
   });
 ```
 
-Nice. Take some time to enjoy the beauty of this.
+Nice. If you go back to the point where I "broke the automated tests", you should see that the only difference with this last approach is that I added the `startWith()`.
 
 ... introduce suggestion1Stream
 
