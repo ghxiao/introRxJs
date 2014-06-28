@@ -223,7 +223,7 @@ responseStream.subscribe(function(response) {
 
 ### The refresh button
 
-I didn't mention that the JSON in the response is a list with 100 users. The API only allows us to specify the page offset, and not the page size, so we're using just 3 data objects and wasting 97 others. We can ignore that problem for now, since later on we will see how to cache results for later usage.
+I did not yet mention that the JSON in the response is a list with 100 users. The API only allows us to specify the page offset, and not the page size, so we're using just 3 data objects and wasting 97 others. We can ignore that problem for now, since later on we will see how to cache results for later usage.
 
 Everytime the refresh button is clicked, the request stream should emit a new value, so that we can get a new response. We need two things: a stream of click events on the refresh button (mantra: anything can be a stream), and we need to change the request stream to depend on the refresh click stream. Glady, RxJS comes with tools to make Observables from event listeners.
 
