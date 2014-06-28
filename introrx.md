@@ -387,7 +387,11 @@ The big picture is now:
     requestStream: -r-----r--------r---->
    responseStream: ----R------R------R-->   
 suggestion1Stream: ----s--N---s----N-s-->
+suggestion2Stream: ----q--N---q----N-q-->
+suggestion3Stream: ----t--N---t----N-t-->
 ```
+
+Where `N` stands for `null`.
 
 
 http://jsfiddle.net/staltz/8jFJH/36
