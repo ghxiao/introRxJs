@@ -326,6 +326,12 @@ refreshClickStream.subscribe(function() {
 
 No, not so fast, pal. Remember the FRP mantra? 
 
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+
 ![Mantra](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/796be9b66ff7ce58b90e65a49e3b9832b862dedd/zmantra.jpg)
 
 
