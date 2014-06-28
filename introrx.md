@@ -343,4 +343,41 @@ var suggestion1Stream = responseStream
   });
 ```
 
+The others, `suggestion2Stream` and `suggestion3Stream` can be simply copy pasted from `suggestion1Stream`. This is not DRY, but it will keep our example simple for this tutorial, plus I think it's a good exercise to think how to avoid repetition in this case.
+
+Instead of having the rendering happen in responseStream's subscribe(), we do that here:
+
+```javascript
+suggestion1Stream.subscribe(function(suggestion) {
+  // render the 1st suggestion to the DOM
+});
+```
+
+Back to the "on refresh, clear the suggestions", we can simply map refresh clicks to `null` suggestion data, and include that in the `suggestion1Stream`, as such:
+
+```javascript
+var suggestion1Stream = responseStream
+  .map(function(listUsers) {
+    // get one random user from the list
+    return listUsers[Math.floor(Math.random()*listUsers.length)];
+  })
+  .merge(
+    refreshClickStream.map(function(){ return null; })
+  );
+```
+
+And when rendering, we interpret `null` as "no data", hence hiding its UI element.
+
+```javascript
+suggestion1Stream.subscribe(function(suggestion) {
+  if (suggestion === null) {
+    // hide the first suggestion DOM element
+  }
+  else {
+    // show the first suggestion DOM element
+    // and render the data
+  }
+});
+```
+
 http://jsfiddle.net/staltz/8jFJH/36
