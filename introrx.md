@@ -242,6 +242,67 @@ var requestStream = refreshClickStream
   });
 ```
 
+Because I'm dumb and I don't have automated tests, I just broke one of our previously built features. A request doesn't happen anymore on startup, it happens only when the refresh is clicked. Urgh. I need both behaviors: a request when _either_ a refresh is clicked _or_ the webpage was just opened.
+
+We know how to make a separate stream for each one of those cases:
+
+```javascript
+var requestOnRefreshStream = refreshClickStream
+  .map(function() {
+      var randomOffset = Math.floor(Math.random()*500);
+      return 'https://api.github.com/users?since=' + randomOffset;
+  });
+  
+var startupRequestStream = Rx.Observable.returnValue('https://api.github.com/users');
+```
+
+But how can we "merge" these two into one? Well, there's **merge()**. Explained in the diagram dialect, this is what it does:
+
+```
+stream A: ---a--------e-----o----->
+stream B: -----B---C-----D-------->
+merged:   ---a-B---C--e--D--o----->
+```
+
+It should be easy now:
+
+```javascript
+var requestOnRefreshStream = refreshClickStream
+  .map(function() {
+      var randomOffset = Math.floor(Math.random()*500);
+      return 'https://api.github.com/users?since=' + randomOffset;
+  });
+  
+var startupRequestStream = Rx.Observable.returnValue('https://api.github.com/users');
+
+var requestStream = Rx.Observable.merge(
+  requestOnRefreshStream, startupRequestStream
+);
+```
+
+There is an alternative and cleaner way of writing that, without the intermediate streams.
+
+```javascript
+var requestStream = refreshClickStream
+  .map(function() {
+      var randomOffset = Math.floor(Math.random()*500);
+      return 'https://api.github.com/users?since=' + randomOffset;
+  })
+  .merge(Rx.Observable.returnValue('https://api.github.com/users'));
+```
+
+Even shorter, even more readable:
+```javascript
+var requestStream = refreshClickStream
+  .map(function() {
+      var randomOffset = Math.floor(Math.random()*500);
+      return 'https://api.github.com/users?since=' + randomOffset;
+  })
+  .startWith('https://api.github.com/users');
+```
+
+The `startWith()` function does exactly what you think it does. No matter how your input stream looks like, the output stream resulting of `startWith(x)` will have `x` at the beginning.
+
 ... introduce suggestion1Stream
 
 http://jsfiddle.net/staltz/8jFJH/36
