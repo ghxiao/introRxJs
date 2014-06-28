@@ -314,6 +314,17 @@ var requestStream = refreshClickStream.startWith('fake click')
 
 Nice. If you go back to the point where I "broke the automated tests", you should see that the only difference with this last approach is that I added the `startWith()`.
 
-... introduce suggestion1Stream
+### Modelling the 3 suggestions with streams
+
+Until now, we have only touched a _suggestion_ UI element on the rendering step that happens in the responseStream `subscribe()`. Now with the refresh button, we have a problem: as soon as you click 'refresh', the current 3 suggestions are not cleared. New suggestions come in after a response has arrived, but to make the UI look nice, we need to clean out the current suggestions when clicks happen on the refresh.
+
+```javascript
+refreshClickStream.subscribe(function() {
+  // clear the 3 suggestion DOM elements 
+});
+```
+
+No, not so fast, pal. Remember the FRP mantra? 
+
 
 http://jsfiddle.net/staltz/8jFJH/36
