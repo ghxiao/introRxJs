@@ -316,7 +316,7 @@ Nice. If you go back to the point where I "broke the automated tests", you shoul
 
 ### Modelling the 3 suggestions with streams
 
-Until now, we have only touched a _suggestion_ UI element on the rendering step that happens in the responseStream `subscribe()`. Now with the refresh button, we have a problem: as soon as you click 'refresh', the current 3 suggestions are not cleared. New suggestions come in after a response has arrived, but to make the UI look nice, we need to clean out the current suggestions when clicks happen on the refresh.
+Until now, we have only touched a _suggestion_ UI element on the rendering step that happens in the responseStream's `subscribe()`. Now with the refresh button, we have a problem: as soon as you click 'refresh', the current 3 suggestions are not cleared. New suggestions come in only after a response has arrived, but to make the UI look nice, we need to clean out the current suggestions when clicks happen on the refresh.
 
 ```javascript
 refreshClickStream.subscribe(function() {
