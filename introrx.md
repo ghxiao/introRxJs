@@ -48,7 +48,7 @@ Since this feels so familiar already, and I don't want you to get bored, let's d
 
 Let's just say that you want to have a stream of "double click" events. To make it even more interesting, let's say we want the new stream to consider triple clicks as double clicks, or in general, multiple clicks (two or more). Take a deep breath and imagine how you would do that in a traditional imperative and stateful fashion. I bet it sounds fairly nasty and involves some variables to keep state and some fiddling with time intervals.
 
-Well, in FRP it's pretty simple. In fact, the logic is just 4 lines of code. http://jsfiddle.net/staltz/4gGgs/24/
+Well, in FRP it's pretty simple. In fact, the logic is just 4 lines of code. http://jsfiddle.net/staltz/4gGgs/25/
 But let's ignore code for now. Thinking in diagrams is the best way to understand and build streams, whether you're a beginner or an expert.
 
 ![Multiple clicks stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/b580ad4a33b63acb2ced9b8e5e90faab8ca7ef26/zmulticlickstream.png)
@@ -69,7 +69,7 @@ Apps nowadays have an abundancy of real-time events of every kind that enable a 
 
 Let's dive into the real stuff. A real-world example with a step-by-step guide on how to think in FRP. No synthetic examples, no half-explained concepts. By the end of this tutorial we will have produced real functioning code, while knowing why we did each thing.
 
-I picked **Javascript** and **RxJS** as the tools for this, for a reason: Javascript is the most familiar language out there at the moment, and the [Rx* library family](https://rx.codeplex.com/) is widely available for many languages (C#, Java, Javascript, Ruby, Python, C++, etc). So whatever your tools are, you can concretely benefit by following this tutorial.
+I picked **Javascript** and **[RxJS](https://github.com/Reactive-Extensions/RxJS)** as the tools for this, for a reason: Javascript is the most familiar language out there at the moment, and the [Rx* library family](https://rx.codeplex.com/) is widely available for many languages and platforms ([.NET](https://rx.codeplex.com/), [Java](https://github.com/Netflix/RxJava), [Scala](https://github.com/Netflix/RxJava/tree/master/language-adaptors/rxjava-scala), [Clojure](https://github.com/Netflix/RxJava/tree/master/language-adaptors/rxjava-clojure),  [Javascript](https://github.com/Reactive-Extensions/RxJS), [Ruby](https://github.com/Reactive-Extensions/Rx.rb), [Python](https://github.com/Reactive-Extensions/RxPy), [C++](https://github.com/Reactive-Extensions/RxCpp), [Objective-C/Cocoa](https://github.com/ReactiveCocoa/ReactiveCocoa), [Groovy](https://github.com/Netflix/RxJava/tree/master/language-adaptors/rxjava-groovy), etc). So whatever your tools are, you can concretely benefit by following this tutorial.
 
 ### Implementing a "Who to follow" suggestions box in FRP
 
@@ -174,7 +174,7 @@ var responseMetastream = requestStream
 
 Then we will have created a beast called "_metastream_": a stream of streams.
 
-![Response metastream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/29a555a0088f60a2d2407cab0b0dff968ce0410d/zresponsemetastream.png)
+![Response metastream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/e8fd1bb6bd93533cf8afae42bdf19bdff92fbc2c/zresponsemetastream.png)
 
 Now, that looks confusing, and doesn't seem to help us at all. We just want a simple stream of responses, where each emitted value is a JSON object, not a 'Promise' of a JSON object. Say hi to Mr. Flatmap: a version of `map()` than "flattens" a metastream, by emitting on the "trunk" stream everything that will be emitted on "branch" streams.
 
@@ -192,13 +192,13 @@ var responseStream = requestStream
 Nice. And because the response stream is defined according to request stream, if we have more events happening on request stream, we will have the corresponding response events happening on response stream, as expected.
 
 ```
-requestStream:  --a-----b-----c------|->
-responseStream: -----A-----B------C--|->
+requestStream:  --a-----b--c------------|->
+responseStream: -----A--------B-----C---|->
 
 (lowercase is a request, uppercase is its response)
 ```
 
-Now that we finally have a response stream, we can finally render the data we receive:
+Now that we finally have a response stream, we can render the data we receive:
 
 ```javascript
 responseStream.subscribe(function(response) {
@@ -213,12 +213,7 @@ var requestStream = Rx.Observable.returnValue('https://api.github.com/users');
 
 var responseStream = requestStream
   .flatMap(function(requestUrl) {
-    return Rx.Observable.create(function (observer) {
-      $.ajax({url: url})
-      .then(function(response) { observer.onNext(response); })
-      .fail(function(jqXHR, status, error) { observer.onError(error); })
-      .done(function() { observer.onCompleted(); });
-    });
+    return Rx.Observable.fromPromise($.ajax({url: requestUrl}));
   });
 
 responseStream.subscribe(function(response) {
@@ -226,8 +221,110 @@ responseStream.subscribe(function(response) {
 });
 ```
 
-Until now, there is no benefit in solving this with FRP as compared to rendering inside the promise's `then()`. But as we add more features soon, it will be good to have these streams in place. Stay with me.
-
 ### The refresh button
 
-http://jsfiddle.net/staltz/8jFJH/34/
+I didn't mention that the JSON in the response is a list with 100 users. The API only allows us to specify the page offset, and not the page size, so we're using just 3 data objects and wasting 97 others. We can ignore that problem for now, since later on we will see how to cache results for later usage.
+
+Everytime the refresh button is clicked, the request stream should emit a new value, so that we can get a new response. We need two things: a stream of click events on the refresh button (mantra: anything can be a stream), and we need to change the request stream to depend on the refresh click stream. Glady, RxJS comes with tools to make Observables from event listeners.
+
+```javascript
+var refreshButton = document.querySelector('.refresh');
+var refreshClickStream = Rx.Observable.fromEvent(refreshButton, 'click');
+```
+
+Since the refresh click event doesn't itself carry any API URL, we need to map each click an actual URL. Now we change the request stream to be the refresh click stream mapped to the API endpoint with a random offset parameter each time.
+
+```javascript
+var requestStream = refreshClickStream
+  .map(function() {
+      var randomOffset = Math.floor(Math.random()*500);
+      return 'https://api.github.com/users?since=' + randomOffset;
+  });
+```
+
+Because I'm dumb and I don't have automated tests, I just broke one of our previously built features. A request doesn't happen anymore on startup, it happens only when the refresh is clicked. Urgh. I need both behaviors: a request when _either_ a refresh is clicked _or_ the webpage was just opened.
+
+We know how to make a separate stream for each one of those cases:
+
+```javascript
+var requestOnRefreshStream = refreshClickStream
+  .map(function() {
+      var randomOffset = Math.floor(Math.random()*500);
+      return 'https://api.github.com/users?since=' + randomOffset;
+  });
+  
+var startupRequestStream = Rx.Observable.returnValue('https://api.github.com/users');
+```
+
+But how can we "merge" these two into one? Well, there's **merge()**. Explained in the diagram dialect, this is what it does:
+
+```
+stream A: ---a--------e-----o----->
+stream B: -----B---C-----D-------->
+          vvvvvvvvv merge vvvvvvvvv
+          ---a-B---C--e--D--o----->
+```
+
+It should be easy now:
+
+```javascript
+var requestOnRefreshStream = refreshClickStream
+  .map(function() {
+      var randomOffset = Math.floor(Math.random()*500);
+      return 'https://api.github.com/users?since=' + randomOffset;
+  });
+  
+var startupRequestStream = Rx.Observable.returnValue('https://api.github.com/users');
+
+var requestStream = Rx.Observable.merge(
+  requestOnRefreshStream, startupRequestStream
+);
+```
+
+There is an alternative and cleaner way of writing that, without the intermediate streams.
+
+```javascript
+var requestStream = refreshClickStream
+  .map(function() {
+      var randomOffset = Math.floor(Math.random()*500);
+      return 'https://api.github.com/users?since=' + randomOffset;
+  })
+  .merge(Rx.Observable.returnValue('https://api.github.com/users'));
+```
+
+Even shorter, even more readable:
+```javascript
+var requestStream = refreshClickStream
+  .map(function() {
+      var randomOffset = Math.floor(Math.random()*500);
+      return 'https://api.github.com/users?since=' + randomOffset;
+  })
+  .startWith('https://api.github.com/users');
+```
+
+The `startWith()` function does exactly what you think it does. No matter how your input stream looks like, the output stream resulting of `startWith(x)` will have `x` at the beginning. But I'm not [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) enough, I'm repeating the API endpoint string. One way to fix this is by moving the `startWith()` close to the `refreshClickStream`, to essentially "emulate" a refresh click on startup.  
+
+```javascript
+var requestStream = refreshClickStream.startWith('fake click')
+  .map(function() {
+      var randomOffset = Math.floor(Math.random()*500);
+      return 'https://api.github.com/users?since=' + randomOffset;
+  });
+```
+
+Nice. If you go back to the point where I "broke the automated tests", you should see that the only difference with this last approach is that I added the `startWith()`.
+
+### Modelling the 3 suggestions with streams
+
+Until now, we have only touched a _suggestion_ UI element on the rendering step that happens in the responseStream `subscribe()`. Now with the refresh button, we have a problem: as soon as you click 'refresh', the current 3 suggestions are not cleared. New suggestions come in after a response has arrived, but to make the UI look nice, we need to clean out the current suggestions when clicks happen on the refresh.
+
+```javascript
+refreshClickStream.subscribe(function() {
+  // clear the 3 suggestion DOM elements 
+});
+```
+
+No, not so fast, pal. Remember the FRP mantra? 
+
+
+http://jsfiddle.net/staltz/8jFJH/36
