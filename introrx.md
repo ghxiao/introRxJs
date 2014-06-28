@@ -380,5 +380,14 @@ suggestion1Stream.subscribe(function(suggestion) {
 });
 ```
 
+The big picture is now:
+
+```
+    refreshStream: -------*--------*---->
+    requestStream: -r-----r--------r---->
+   responseStream: ----R------R------R-->   
+suggestion1Stream: ----s--N---s----N-s-->
+```
+
 
 http://jsfiddle.net/staltz/8jFJH/36
