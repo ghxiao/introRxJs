@@ -261,7 +261,8 @@ But how can we "merge" these two into one? Well, there's **merge()**. Explained 
 ```
 stream A: ---a--------e-----o----->
 stream B: -----B---C-----D-------->
-merged:   ---a-B---C--e--D--o----->
+          vvvvvvvvv merge vvvvvvvvv
+          ---a-B---C--e--D--o----->
 ```
 
 It should be easy now:
