@@ -232,7 +232,7 @@ var refreshButton = document.querySelector('.refresh');
 var refreshClickStream = Rx.Observable.fromEvent(refreshButton, 'click');
 ```
 
-Since the refresh click event doesn't itself carry any API URL, we need to map each click an actual URL. Now we change the request stream to be the refresh click stream mapped to the API endpoint with a random offset parameter each time.
+Since the refresh click event doesn't itself carry any API URL, we need to map each click to an actual URL. Now we change the request stream to be the refresh click stream mapped to the API endpoint with a random offset parameter each time.
 
 ```javascript
 var requestStream = refreshClickStream
