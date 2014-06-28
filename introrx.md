@@ -71,7 +71,7 @@ Let's dive into the real stuff. A real-world example with a step-by-step guide o
 
 I picked **Javascript** and **[RxJS](https://github.com/Reactive-Extensions/RxJS)** as the tools for this, for a reason: Javascript is the most familiar language out there at the moment, and the [Rx* library family](https://rx.codeplex.com/) is widely available for many languages and platforms ([.NET](https://rx.codeplex.com/), [Java](https://github.com/Netflix/RxJava), [Scala](https://github.com/Netflix/RxJava/tree/master/language-adaptors/rxjava-scala), [Clojure](https://github.com/Netflix/RxJava/tree/master/language-adaptors/rxjava-clojure),  [Javascript](https://github.com/Reactive-Extensions/RxJS), [Ruby](https://github.com/Reactive-Extensions/Rx.rb), [Python](https://github.com/Reactive-Extensions/RxPy), [C++](https://github.com/Reactive-Extensions/RxCpp), [Objective-C/Cocoa](https://github.com/ReactiveCocoa/ReactiveCocoa), [Groovy](https://github.com/Netflix/RxJava/tree/master/language-adaptors/rxjava-groovy), etc). So whatever your tools are, you can concretely benefit by following this tutorial.
 
-## Implementing a "Who to follow" suggestions box in FRP
+## Implementing a "Who to follow" suggestions box
 
 In Twitter there's is this UI element that suggests other accounts you could follow:
 
@@ -221,7 +221,7 @@ responseStream.subscribe(function(response) {
 });
 ```
 
-### The refresh button
+## The refresh button
 
 I did not yet mention that the JSON in the response is a list with 100 users. The API only allows us to specify the page offset, and not the page size, so we're using just 3 data objects and wasting 97 others. We can ignore that problem for now, since later on we will see how to cache results for later usage.
 
@@ -314,7 +314,7 @@ var requestStream = refreshClickStream.startWith('fake click')
 
 Nice. If you go back to the point where I "broke the automated tests", you should see that the only difference with this last approach is that I added the `startWith()`.
 
-### Modelling the 3 suggestions with streams
+## Modelling the 3 suggestions with streams
 
 Until now, we have only touched a _suggestion_ UI element on the rendering step that happens in the responseStream's `subscribe()`. Now with the refresh button, we have a problem: as soon as you click 'refresh', the current 3 suggestions are not cleared. New suggestions come in only after a response has arrived, but to make the UI look nice, we need to clean out the current suggestions when clicks happen on the refresh.
 
