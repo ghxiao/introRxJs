@@ -525,6 +525,18 @@ var suggestion1Stream = close1ClickStream.startWith('fake click')
   )
   .startWith(null);
 // and the same logic for suggestion2Stream and suggestion3Stream
+
+suggestion1Stream.subscribe(function(suggestion) {
+  if (suggestion === null) {
+    // hide the first suggestion DOM element
+  }
+  else {
+    // show the first suggestion DOM element
+    // and render the data
+  }
+});
 ```
 
 **You can see this working example at [http://jsfiddle.net/staltz/8jFJH/45/](http://jsfiddle.net/staltz/8jFJH/45/)**
+
+That piece of code is small but dense: it features management of multiple events with proper separation of concerns, and even caching of responses. The functional style of programming this made the code look more declarative than imperative: we are not giving a sequence of instructions to execute, we are just **telling what something is** by defining relationships between streams. For instance, with FRP we told the computer that _`suggestion1Stream` **is** the 'close 1' stream combined with the latest response, besides being `null` when a refresh happens or program startup happened_.
