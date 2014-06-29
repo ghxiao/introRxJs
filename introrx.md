@@ -81,7 +81,7 @@ In Twitter there is this UI element that suggests other accounts you could follo
 We are going to focus on imitating its core features, which are:
 
 * On startup, load accounts data from the API and display 3 suggestions
-* On clicking "Refresh", load other 3 account suggestions onto the 3 rows
+* On clicking "Refresh", load 3 other account suggestions into the 3 rows
 * On click 'x' button on an account row, clear only that current account and display another
 * Each row displays the account's avatar and links to their page
 
@@ -541,6 +541,8 @@ suggestion1Stream.subscribe(function(suggestion) {
 **You can see this working example at [http://jsfiddle.net/staltz/8jFJH/46/](http://jsfiddle.net/staltz/8jFJH/46/)**
 
 That piece of code is small but dense: it features management of multiple events with proper separation of concerns, and even caching of responses. The functional style made the code look more declarative than imperative: we are not giving a sequence of instructions to execute, we are just **telling what something is** by defining relationships between streams. For instance, with FRP we told the computer that _`suggestion1Stream` **is** the 'close 1' stream combined with one user from the latest response, besides being `null` when a refresh happens or program startup happened_.
+
+Notice also the impressive absence of control flow elements such as `if`, `for`, `while`, and the typical callbacks that you expect from a Javascript application. In FRP, we have stream functions such as `map`, `filter`, `scan`, `merge`, `combineLatest`, `startWith`, and many more to control the flow of an event-driven program. This toolset of functions gives you more power in less code.
 
 ## What comes next
 
