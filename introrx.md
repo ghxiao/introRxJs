@@ -383,15 +383,40 @@ suggestion1Stream.subscribe(function(suggestion) {
 The big picture is now:
 
 ```
-    refreshStream: -------*--------*---->
-    requestStream: -r-----r--------r---->
-   responseStream: ----R------R------R-->   
-suggestion1Stream: ----s--N---s----N-s-->
-suggestion2Stream: ----q--N---q----N-q-->
-suggestion3Stream: ----t--N---t----N-t-->
+refreshClickStream: ----------*--------*---->
+     requestStream: -r--------r--------r---->
+    responseStream: ----R---------R------R-->   
+ suggestion1Stream: ----s-----N---s----N-s-->
+ suggestion2Stream: ----q-----N---q----N-q-->
+ suggestion3Stream: ----t-----N---t----N-t-->
 ```
 
 Where `N` stands for `null`.
+
+As a bonus, we can also render "empty" suggestions on startup. That is done by adding `startWith(null)` to the suggestion streams:
+
+```javascript
+var suggestion1Stream = responseStream
+  .map(function(listUsers) {
+    // get one random user from the list
+    return listUsers[Math.floor(Math.random()*listUsers.length)];
+  })
+  .merge(
+    refreshClickStream.map(function(){ return null; })
+  )
+  .startWith(null);
+```
+
+Which results in:
+
+```
+refreshClickStream: ----------*---------*---->
+     requestStream: -r--------r---------r---->
+    responseStream: ----R----------R------R-->   
+ suggestion1Stream: -N--s-----N----s----N-s-->
+ suggestion2Stream: -N--q-----N----q----N-q-->
+ suggestion3Stream: -N--t-----N----t----N-t-->
+```
 
 
 http://jsfiddle.net/staltz/8jFJH/40/
