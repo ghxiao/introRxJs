@@ -86,7 +86,7 @@ We are going to focus on imitating its core features, which are:
 
 We can leave out the other features and buttons because they are minor. And, instead of Twitter, which recently closed it's API to the unauthorized public, let's build that UI for following people on Github. There's a [Github API for getting users](https://developer.github.com/v3/users/#get-all-users).
 
-The complete code for this is ready at [http://jsfiddle.net/staltz/8jFJH/45/](http://jsfiddle.net/staltz/8jFJH/45/) in case you want to take a peak already.
+The complete code for this is ready at [http://jsfiddle.net/staltz/8jFJH/46/](http://jsfiddle.net/staltz/8jFJH/46/) in case you want to take a peak already.
 
 ## Request and response
 
@@ -537,6 +537,16 @@ suggestion1Stream.subscribe(function(suggestion) {
 });
 ```
 
-**You can see this working example at [http://jsfiddle.net/staltz/8jFJH/45/](http://jsfiddle.net/staltz/8jFJH/45/)**
+**You can see this working example at [http://jsfiddle.net/staltz/8jFJH/46/](http://jsfiddle.net/staltz/8jFJH/46/)**
 
-That piece of code is small but dense: it features management of multiple events with proper separation of concerns, and even caching of responses. The functional style of programming this made the code look more declarative than imperative: we are not giving a sequence of instructions to execute, we are just **telling what something is** by defining relationships between streams. For instance, with FRP we told the computer that _`suggestion1Stream` **is** the 'close 1' stream combined with one user from the latest response, besides being `null` when a refresh happens or program startup happened_.
+That piece of code is small but dense: it features management of multiple events with proper separation of concerns, and even caching of responses. The functional style made the code look more declarative than imperative: we are not giving a sequence of instructions to execute, we are just **telling what something is** by defining relationships between streams. For instance, with FRP we told the computer that _`suggestion1Stream` **is** the 'close 1' stream combined with one user from the latest response, besides being `null` when a refresh happens or program startup happened_.
+
+## What comes next
+
+If you think Rx* will be your preferred library for FRP, take a while to get acquainted with the [big list of functions](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md) for transforming, combining, and creating Observables. If you want understand those functions as diagrams of streams, take a look at [RxJava's very useful documentation with marble diagrams](https://github.com/Netflix/RxJava/wiki/Creating-Observables). Once you start getting the hang of programming with Rx*, 
+
+FRP works great for event-heavy frontends and apps. But it is not just a client-side thing, it works great also in the backend and close to databases. In fact, [RxJava is a key component for enabling server-side concurrency in Netflix's API](http://techblog.netflix.com/2013/02/rxjava-netflix-api.html). FRP is not framework restricted to one type of application or language. It really is a paradigm that you can apply for programming any event-driven software.
+
+...Hot vs cold
+
+...The important is to think in FRP
