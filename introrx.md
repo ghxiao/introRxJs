@@ -418,5 +418,8 @@ refreshClickStream: ----------o---------o---->
  suggestion3Stream: -N--t-----N----t----N-t-->
 ```
 
+## Hiding a single suggestion, and using cached responses
+
+
 
 http://jsfiddle.net/staltz/8jFJH/40/
