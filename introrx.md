@@ -74,7 +74,7 @@ I picked **Javascript** and **[RxJS](https://github.com/Reactive-Extensions/RxJS
 
 ## Implementing a "Who to follow" suggestions box
 
-In Twitter there's is this UI element that suggests other accounts you could follow:
+In Twitter there is this UI element that suggests other accounts you could follow:
 
 ![Twitter Who to follow suggestions box](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/eb151a86fb9f6496937b9bd9758c3d4970a2e2e1/ztwitterbox.png)
 
