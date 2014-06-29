@@ -435,5 +435,94 @@ var requestStream = refreshClickStream.startWith('fake click')
   });
 ```
 
-That does not work. It will close and reload _all_ suggestions, rather than just only the one we clicked on.
+That does not work. It will close and reload _all_ suggestions, rather than just only the one we clicked on. There are a couple of different ways of solving this, and to keep it interesting, we will solve it by reusing previous responses. The API's response page size is 100 users while we were using just 3 of those, so there is plenty of fresh data available. No need to request more.
+
+Again, let's think in streams. When a 'close1' click event happens, we want to use the _most recently emitted_ response on `responseStream` to get one random user from the list in the response. As such:
+
+```
+    requestStream: --r--------------->
+   responseStream: ------R----------->
+close1ClickStream: ------------c----->
+suggestion1Stream: ------s-----s----->
+```
+
+In Rx* there is a combinator function called [`combineLatest`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md#rxobservableprototypecombinelatestargs-resultselector) that seems to do what we need. It takes two streams A and B as inputs, and whenever either stream emits a value, `combineLatest` joins the two most recently emitted value `a` and `b` from both streams and outputs a value `c = f(x,y)`, where `f` is a function you define. It is better explained with a diagram:
+
+```
+stream A: --a-----------e--------i-------->
+stream B: -----b----c--------d-------q---->
+          vvvvvvvv combineLatest(f) vvvvvvv
+          ----AB---AC--EC---ED--ID--IQ---->
+
+where f is the uppercase function
+```
+
+We could apply combineLatest() on `close1ClickStream` and `responseStream`, so that whenever the close 1 button is clicked, we get the latest response emitted and produce a new value on `suggestion1Stream`. On the other hand, combineLatest() is symmetric: whenever a new response is emitted on `responseStream`, it will combine with the latest 'close 1' click to produce a new suggestion. That is interesting, because it allows us to simplify our previous code for `suggestion1Stream`, like this:
+
+```javascript
+var suggestion1Stream = close1ClickStream
+  .combineLatest(responseStream,             
+    function(click, listUsers) {
+      return listUsers[Math.floor(Math.random()*listUsers.length)];
+    }
+  )
+  .merge(
+    refreshClickStream.map(function(){ return null; })
+  )
+  .startWith(null);
+```
+
+One piece is still missing in the puzzle. The combineLatest() uses the most recent of the two sources, but if one of those sources hasn't emitted anything yet, combineLatest() cannot produce a data event on the output stream. If you look at the ASCII diagram above, you will see that the output has nothing when the first stream emitted value `a`. Only when the second stream emitted value `b` could it produce an output value.
+
+There are different ways of solving this, and we will stay with the simplest one, which is simulating a click to the 'close 1' button on startup:
+
+```javascript
+var suggestion1Stream = close1ClickStream.startWith('fake click') // we added this
+  .combineLatest(responseStream,             
+    function(click, listUsers) {l
+      return listUsers[Math.floor(Math.random()*listUsers.length)];
+    }
+  )
+  .merge(
+    refreshClickStream.map(function(){ return null; })
+  )
+  .startWith(null);
+```
+
+## Wrapping up
+
+And we're done. The complete code for all this was:
+
+```javascript
+var refreshButton = document.querySelector('.refresh');
+var refreshClickStream = Rx.Observable.fromEvent(refreshButton, 'click');
+
+var closeButton1 = document.querySelector('.close1');
+var close1ClickStream = Rx.Observable.fromEvent(closeButton1, 'click');
+// and the same logic for close2 and close3
+
+var requestStream = refreshClickStream.startWith('startup click')
+  .map(function() {
+    var randomOffset = Math.floor(Math.random()*500);
+    return 'https://api.github.com/users?since=' + randomOffset;
+  });
+
+var responseStream = requestStream
+  .flatMap(function (requestUrl) {
+    return Rx.Observable.fromPromise($.ajax({url: requestUrl}));
+  });
+
+var suggestion1Stream = close1ClickStream.startWith('fake click')
+  .combineLatest(responseStream,             
+    function(click, listUsers) {
+      return listUsers[Math.floor(Math.random()*listUsers.length)];
+    }
+  )
+  .merge(
+    refreshClickStream.map(function(){ return null; })
+  )
+  .startWith(null);
+// and the same logic for suggestion2Stream and suggestion3Stream
+```
+
 http://jsfiddle.net/staltz/8jFJH/40/
