@@ -418,7 +418,7 @@ refreshClickStream: ----------o---------o---->
  suggestion3Stream: -N--t-----N----t----N-t-->
 ```
 
-## Hiding a single suggestion, and using cached responses
+## Closing a suggestion and using cached responses
 
 
 
