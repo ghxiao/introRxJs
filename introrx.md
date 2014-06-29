@@ -1,4 +1,5 @@
 ## The introduction to Reactive Programming you've been missing
+(by [@andrestaltz](https://twitter.com/andrestaltz))
 
 So you're curious in learning this new thing called (Functional) Reactive Programming (FRP).
 
@@ -545,7 +546,8 @@ That piece of code is small but dense: it features management of multiple events
 
 If you think Rx* will be your preferred library for FRP, take a while to get acquainted with the [big list of functions](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md) for transforming, combining, and creating Observables. If you want understand those functions as diagrams of streams, take a look at [RxJava's very useful documentation with marble diagrams](https://github.com/Netflix/RxJava/wiki/Creating-Observables). Once you start getting the hang of programming with Rx*, it is absolutely required to understand the concept of [Hot vs Cold Observables](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/gettingstarted/creating.md#cold-vs-hot-observables). If you ignore this, it will come back and bite you brutally. You have been warned.
 
-But Functional Reactive Programming is not just Rx*. There is [http://baconjs.github.io/](http://baconjs.github.io/) which is in many ways more intuitive than Rx*. The [Elm Language](http://elm-lang.org/) lives in its own category: it's an FRP **language** that compiles to Javascript + HTML + CSS, and features a [time travelling debugger](http://debug.elm-lang.org/). Pretty awesome.
+But Functional Reactive Programming is not just Rx*. There is [Bacon.js](http://baconjs.github.io/) which intuitive to work with, without the quirks you sometimes encounter in Rx*. The [Elm Language](http://elm-lang.org/) lives in its own category: it's an FRP **language** that compiles to Javascript + HTML + CSS, and features a [time travelling debugger](http://debug.elm-lang.org/). Pretty awesome.
 
 FRP works great for event-heavy frontends and apps. But it is not just a client-side thing, it works great also in the backend and close to databases. In fact, [RxJava is a key component for enabling server-side concurrency in Netflix's API](http://techblog.netflix.com/2013/02/rxjava-netflix-api.html). FRP is not framework restricted to one type of application or language. It really is a paradigm that you can apply for programming any event-driven software.
 
+If this tutorial helped you, [tweet it](https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fstaltz.github.io%2Fdjangoconfi-mongoengine%2F&amp;text=Using%20%40MongoDB%20as%20your%20primary%20%40djangoproject%20database&amp;tw_p=tweetbutton&amp;url=http%3A%2F%2Fstaltz.github.io%2Fdjangoconfi-mongoengine&amp;via=andrestaltz) or follow me in Twitter.
