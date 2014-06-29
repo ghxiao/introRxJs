@@ -86,6 +86,8 @@ We are going to focus on imitating its core features, which are:
 
 We can leave out the other features and buttons because they are minor. And, instead of Twitter, which recently closed it's API to the unauthorized public, let's build that UI for following people on Github. There's a [Github API for getting users](https://developer.github.com/v3/users/#get-all-users).
 
+The complete code for this is ready at [http://jsfiddle.net/staltz/8jFJH/45/](http://jsfiddle.net/staltz/8jFJH/45/) in case you want to take a peak already.
+
 ## Request and response
 
 **How do you approach this problem with FRP?** Well, to start with, (almost) _everything can be a stream_. That's the FRP mantra. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simply about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream. At first this will feel like an overkill, but we need to start from the basics, right?
@@ -525,4 +527,4 @@ var suggestion1Stream = close1ClickStream.startWith('fake click')
 // and the same logic for suggestion2Stream and suggestion3Stream
 ```
 
-http://jsfiddle.net/staltz/8jFJH/40/
+**You can see this working example at [http://jsfiddle.net/staltz/8jFJH/45/](http://jsfiddle.net/staltz/8jFJH/45/)**
