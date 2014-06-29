@@ -420,6 +420,20 @@ refreshClickStream: ----------o---------o---->
 
 ## Closing a suggestion and using cached responses
 
+There is one feature remaining to implement. Each suggestion should have its own 'x' button for closing it, and loading another in its place. At first thought, you could say it's enough to make a new request when any close button is clicked:
 
+```javascript
+var close1Button = document.querySelector('.close1');
+var close1ClickStream = Rx.Observable.fromEvent(close1Button, 'click');
+// and the same for close2Button and close3Button
 
+var requestStream = refreshClickStream.startWith('fake click')
+  .merge(close1ClickStream) // we added this
+  .map(function() {
+    var randomOffset = Math.floor(Math.random()*500);
+    return 'https://api.github.com/users?since=' + randomOffset;
+  });
+```
+
+That does not work. It will close and reload _all_ suggestions, rather than just only the one we clicked on.
 http://jsfiddle.net/staltz/8jFJH/40/
