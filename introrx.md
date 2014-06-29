@@ -126,18 +126,18 @@ Notice we are using a jQuery Ajax callback to handle the asynchronicity of the r
 requestStream.subscribe(function(requestUrl) {
   // execute the request
   var responseStream = Rx.Observable.create(function (observer) {
-      $.ajax({
-        url: url
-      })
-      .then(function(response) {
-        observer.onNext(response);
-      })
-      .fail(function(jqXHR, status, error) {
-        observer.onError(error);
-      })
-      .done(function() {
-        observer.onCompleted();
-      });
+    $.ajax({
+      url: url
+    })
+    .then(function(response) {
+      observer.onNext(response);
+    })
+    .fail(function(jqXHR, status, error) {
+      observer.onError(error);
+    })
+    .done(function() {
+      observer.onCompleted();
+    });
   });
   
   responseStream.subscribe(function(response) {
@@ -240,8 +240,8 @@ Since the refresh click event doesn't itself carry any API URL, we need to map e
 ```javascript
 var requestStream = refreshClickStream
   .map(function() {
-      var randomOffset = Math.floor(Math.random()*500);
-      return 'https://api.github.com/users?since=' + randomOffset;
+    var randomOffset = Math.floor(Math.random()*500);
+    return 'https://api.github.com/users?since=' + randomOffset;
   });
 ```
 
@@ -252,8 +252,8 @@ We know how to make a separate stream for each one of those cases:
 ```javascript
 var requestOnRefreshStream = refreshClickStream
   .map(function() {
-      var randomOffset = Math.floor(Math.random()*500);
-      return 'https://api.github.com/users?since=' + randomOffset;
+    var randomOffset = Math.floor(Math.random()*500);
+    return 'https://api.github.com/users?since=' + randomOffset;
   });
   
 var startupRequestStream = Rx.Observable.returnValue('https://api.github.com/users');
@@ -273,8 +273,8 @@ It should be easy now:
 ```javascript
 var requestOnRefreshStream = refreshClickStream
   .map(function() {
-      var randomOffset = Math.floor(Math.random()*500);
-      return 'https://api.github.com/users?since=' + randomOffset;
+    var randomOffset = Math.floor(Math.random()*500);
+    return 'https://api.github.com/users?since=' + randomOffset;
   });
   
 var startupRequestStream = Rx.Observable.returnValue('https://api.github.com/users');
@@ -289,8 +289,8 @@ There is an alternative and cleaner way of writing that, without the intermediat
 ```javascript
 var requestStream = refreshClickStream
   .map(function() {
-      var randomOffset = Math.floor(Math.random()*500);
-      return 'https://api.github.com/users?since=' + randomOffset;
+    var randomOffset = Math.floor(Math.random()*500);
+    return 'https://api.github.com/users?since=' + randomOffset;
   })
   .merge(Rx.Observable.returnValue('https://api.github.com/users'));
 ```
@@ -299,8 +299,8 @@ Even shorter, even more readable:
 ```javascript
 var requestStream = refreshClickStream
   .map(function() {
-      var randomOffset = Math.floor(Math.random()*500);
-      return 'https://api.github.com/users?since=' + randomOffset;
+    var randomOffset = Math.floor(Math.random()*500);
+    return 'https://api.github.com/users?since=' + randomOffset;
   })
   .startWith('https://api.github.com/users');
 ```
@@ -310,8 +310,8 @@ The [`startWith()`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/
 ```javascript
 var requestStream = refreshClickStream.startWith('fake click')
   .map(function() {
-      var randomOffset = Math.floor(Math.random()*500);
-      return 'https://api.github.com/users?since=' + randomOffset;
+    var randomOffset = Math.floor(Math.random()*500);
+    return 'https://api.github.com/users?since=' + randomOffset;
   });
 ```
 
