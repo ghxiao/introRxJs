@@ -383,7 +383,7 @@ suggestion1Stream.subscribe(function(suggestion) {
 The big picture is now:
 
 ```
-refreshClickStream: ----------*--------*---->
+refreshClickStream: ----------o--------o---->
      requestStream: -r--------r--------r---->
     responseStream: ----R---------R------R-->   
  suggestion1Stream: ----s-----N---s----N-s-->
@@ -410,7 +410,7 @@ var suggestion1Stream = responseStream
 Which results in:
 
 ```
-refreshClickStream: ----------*---------*---->
+refreshClickStream: ----------o---------o---->
      requestStream: -r--------r---------r---->
     responseStream: ----R----------R------R-->   
  suggestion1Stream: -N--s-----N----s----N-s-->
