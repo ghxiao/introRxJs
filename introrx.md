@@ -307,7 +307,7 @@ var requestStream = refreshClickStream
 The [`startWith()`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md#rxobservableprototypestartwithscheduler-args) function does exactly what you think it does. No matter how your input stream looks like, the output stream resulting of `startWith(x)` will have `x` at the beginning. But I'm not [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) enough, I'm repeating the API endpoint string. One way to fix this is by moving the `startWith()` close to the `refreshClickStream`, to essentially "emulate" a refresh click on startup.  
 
 ```javascript
-var requestStream = refreshClickStream.startWith('fake click')
+var requestStream = refreshClickStream.startWith('startup click')
   .map(function() {
     var randomOffset = Math.floor(Math.random()*500);
     return 'https://api.github.com/users?since=' + randomOffset;
@@ -429,7 +429,7 @@ var close1Button = document.querySelector('.close1');
 var close1ClickStream = Rx.Observable.fromEvent(close1Button, 'click');
 // and the same for close2Button and close3Button
 
-var requestStream = refreshClickStream.startWith('fake click')
+var requestStream = refreshClickStream.startWith('startup click')
   .merge(close1ClickStream) // we added this
   .map(function() {
     var randomOffset = Math.floor(Math.random()*500);
@@ -479,7 +479,7 @@ One piece is still missing in the puzzle. The combineLatest() uses the most rece
 There are different ways of solving this, and we will stay with the simplest one, which is simulating a click to the 'close 1' button on startup:
 
 ```javascript
-var suggestion1Stream = close1ClickStream.startWith('fake click') // we added this
+var suggestion1Stream = close1ClickStream.startWith('startup click') // we added this
   .combineLatest(responseStream,             
     function(click, listUsers) {l
       return listUsers[Math.floor(Math.random()*listUsers.length)];
@@ -514,7 +514,7 @@ var responseStream = requestStream
     return Rx.Observable.fromPromise($.ajax({url: requestUrl}));
   });
 
-var suggestion1Stream = close1ClickStream.startWith('fake click')
+var suggestion1Stream = close1ClickStream.startWith('startup click')
   .combineLatest(responseStream,             
     function(click, listUsers) {
       return listUsers[Math.floor(Math.random()*listUsers.length)];
