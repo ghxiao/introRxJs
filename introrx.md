@@ -98,7 +98,7 @@ We are going to focus on imitating its core features, which are:
 
 We can leave out the other features and buttons because they are minor. And, instead of Twitter, which recently closed it's API to the unauthorized public, let's build that UI for following people on Github. There's a [Github API for getting users](https://developer.github.com/v3/users/#get-all-users).
 
-The complete code for this is ready at http://jsfiddle.net/staltz/8jFJH/47/ in case you want to take a peak already.
+The complete code for this is ready at http://jsfiddle.net/staltz/8jFJH/48/ in case you want to take a peak already.
 
 ## Request and response
 
@@ -537,7 +537,7 @@ suggestion1Stream.subscribe(function(suggestion) {
 });
 ```
 
-**You can see this working example at http://jsfiddle.net/staltz/8jFJH/47/**
+**You can see this working example at http://jsfiddle.net/staltz/8jFJH/48/**
 
 That piece of code is small but dense: it features management of multiple events with proper separation of concerns, and even caching of responses. The functional style made the code look more declarative than imperative: we are not giving a sequence of instructions to execute, we are just **telling what something is** by defining relationships between streams. For instance, with FRP we told the computer that _`suggestion1Stream` **is** the 'close 1' stream combined with one user from the latest response, besides being `null` when a refresh happens or program startup happened_.
 
