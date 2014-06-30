@@ -47,7 +47,7 @@ X is an error
 
 Since this feels so familiar already, and I don't want you to get bored, let's do something new: we are going to create new click event streams transformed out of the original click event stream.
 
-First, let's make a counter stream that indicates how many times a button was clicked. In many common FRP libraries, each stream has many functions attached to it, such as `map`, `filter`, `scan`, etc. When you call one of these functions, such as `clickStream.map(f)`, it returns a **new stream** based on the click stream. It does not modify the original click stream in any way. This is a property called **immutability**, and it goes together with FRP streams just like pancakes are good with syrup. That allows us to chain functions like `clickStream.map(f).scan(g)`:
+First, let's make a counter stream that indicates how many times a button was clicked. In common FRP libraries, each stream has many functions attached to it, such as `map`, `filter`, `scan`, etc. When you call one of these functions, such as `clickStream.map(f)`, it returns a **new stream** based on the click stream. It does not modify the original click stream in any way. This is a property called **immutability**, and it goes together with FRP streams just like pancakes are good with syrup. That allows us to chain functions like `clickStream.map(f).scan(g)`:
 
 ```
   clickStream: ---c----c--c----c------c-->
@@ -66,8 +66,7 @@ But let's ignore code for now. Thinking in diagrams is the best way to understan
 
 ![Multiple clicks stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/b580ad4a33b63acb2ced9b8e5e90faab8ca7ef26/zmulticlickstream.png)
 
-Grey boxes are functions transforming one stream into another. First we accumulate clicks in lists, whenever 250 milliseconds of "event silence" has happened (that's what `buffer(stream.throttle(250ms))` does, in a nutshell). The result is a stream of lists, from which we apply `map()` to map each list to an integer matching the length of that list. Finally, we ignore `1` integers using the `filter(x >= 2)` function. That's it: 3 operations to produce our intended stream. We can then subscribe ("listen") to it to react accordingly how we wish. 
-
+Grey boxes are functions transforming one stream into another. First we accumulate clicks in lists, whenever 250 milliseconds of "event silence" has happened (that's what `buffer(stream.throttle(250ms))` does, in a nutshell. Don't worry about understanding the details at this point, we are just demoing FRP for now). The result is a stream of lists, from which we apply `map()` to map each list to an integer matching the length of that list. Finally, we ignore `1` integers using the `filter(x >= 2)` function. That's it: 3 operations to produce our intended stream. We can then subscribe ("listen") to it to react accordingly how we wish. 
 I hope you enjoy the beauty of this approach. This example is just the tip of the iceberg: you can apply the same operations on different kinds of streams, for instance, on a stream of API responses; on the other hand, there are many other functions available.
 
 ## "Why should I consider adopting FRP?"
@@ -105,7 +104,7 @@ The complete code for this is ready at [http://jsfiddle.net/staltz/8jFJH/46/](ht
 
 **How do you approach this problem with FRP?** Well, to start with, (almost) _everything can be a stream_. That's the FRP mantra. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simply about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream. At first this will feel like an overkill, but we need to start from the basics, right?
 
-On startup we need to do only one request, so if we model it as a data stream, it will be a stream with only one emitted value.
+On startup we need to do only one request, so if we model it as a data stream, it will be a stream with only one emitted value. Later, we know we will have many requests happening, but for now, it is just one.
 
 ```
 --a------|->
@@ -126,30 +125,22 @@ But now, that is just a stream of strings, doing no other operation, so we need 
 ```javascript
 requestStream.subscribe(function(requestUrl) {
   // execute the request
-  jQuery.getJSON(requestUrl, function(data) {
+  jQuery.getJSON(requestUrl, function(responseData) {
     // ...
   });
 }
 ```
 
-Notice we are using a jQuery Ajax callback to handle the asynchronicity of the request operation. But wait a moment, FRP is for dealing with **asynchronous** data streams. Couldn't the response for that request be a stream containing the data arriving at some time in the future? Well, at a conceptual level, it sure looks like, so let's try that.
+Notice we are using a jQuery Ajax callback (which we assume you [should know already](http://devdocs.io/jquery/jquery.getjson)) to handle the asynchronicity of the request operation. But wait a moment, FRP is for dealing with **asynchronous** data streams. Couldn't the response for that request be a stream containing the data arriving at some time in the future? Well, at a conceptual level, it sure looks like, so let's try that.
 
 ```javascript
 requestStream.subscribe(function(requestUrl) {
   // execute the request
   var responseStream = Rx.Observable.create(function (observer) {
-    $.ajax({
-      url: url
-    })
-    .then(function(response) {
-      observer.onNext(response);
-    })
-    .fail(function(jqXHR, status, error) {
-      observer.onError(error);
-    })
-    .done(function() {
-      observer.onCompleted();
-    });
+    jQuery.getJSON(requestUrl)
+    .then(function(response) { observer.onNext(response); })
+    .fail(function(jqXHR, status, error) { observer.onError(error); })
+    .done(function() { observer.onCompleted(); });
   });
   
   responseStream.subscribe(function(response) {
@@ -170,7 +161,7 @@ What [`Rx.Observable.create()`](https://github.com/Reactive-Extensions/RxJS/blob
 
 Yes.
 
-Observable is Promise++. In Rx you can easily convert a Promise to an Observable by doing `var stream = Rx.Observable.fromPromise(promise)`. The only difference is that Observables are not [Promises/A+](http://promises-aplus.github.io/promises-spec/) compliant, but conceptually there is no clash. A Promise is simply an Observable with one single emitted value. FRP streams go beyond promises by allowing many returned values.
+Observable is Promise++. In Rx you can easily convert a Promise to an Observable by doing `var stream = Rx.Observable.fromPromise(promise)`, so let's use that. The only difference is that Observables are not [Promises/A+](http://promises-aplus.github.io/promises-spec/) compliant, but conceptually there is no clash. A Promise is simply an Observable with one single emitted value. FRP streams go beyond promises by allowing many returned values.
 
 This is pretty nice, and shows how FRP is at least as powerful as Promises. So if you believe the Promises hype, keep an eye on what FRP is capable of.
 
@@ -181,9 +172,7 @@ The one basic function that you should know by now is [`map(f)`](https://github.
 ```javascript
 var responseMetastream = requestStream
   .map(function(requestUrl) {
-    return Rx.Observable.create(function (observer) {
-      // The Ajax Promise as before
-    });
+    return Rx.Observable.fromPromise(jQuery.getJSON(requestUrl));
   });
 ```
 
@@ -196,9 +185,7 @@ Now, that looks confusing, and doesn't seem to help us at all. We just want a si
 ```javascript
 var responseStream = requestStream
   .flatMap(function(requestUrl) {
-    return Rx.Observable.create(function (observer) {
-      // The Ajax Promise as before
-    });
+    return Rx.Observable.fromPromise(jQuery.getJSON(requestUrl));
   });
 ```
 
@@ -228,7 +215,7 @@ var requestStream = Rx.Observable.returnValue('https://api.github.com/users');
 
 var responseStream = requestStream
   .flatMap(function(requestUrl) {
-    return Rx.Observable.fromPromise($.ajax({url: requestUrl}));
+    return Rx.Observable.fromPromise(jQuery.getJSON(requestUrl));
   });
 
 responseStream.subscribe(function(response) {
