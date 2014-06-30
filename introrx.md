@@ -87,7 +87,7 @@ I picked **Javascript** and **[RxJS](https://github.com/Reactive-Extensions/RxJS
 
 In Twitter there is this UI element that suggests other accounts you could follow:
 
-![Twitter Who to follow suggestions box](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/eb151a86fb9f6496937b9bd9758c3d4970a2e2e1/ztwitterbox.png)
+![Twitter Who to follow suggestions box](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/21303570a1c8c599e59f8f8fbda2d03ab943ac9b/ztwitterbox.png)
 
 We are going to focus on imitating its core features, which are:
 
