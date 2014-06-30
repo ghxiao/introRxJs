@@ -61,7 +61,7 @@ The `map(f)` function replaces (into the new stream) each emitted value accordin
 
 To show the real power of FRP, let's just say that you want to have a stream of "double click" events. To make it even more interesting, let's say we want the new stream to consider triple clicks as double clicks, or in general, multiple clicks (two or more). Take a deep breath and imagine how you would do that in a traditional imperative and stateful fashion. I bet it sounds fairly nasty and involves some variables to keep state and some fiddling with time intervals.
 
-Well, in FRP it's pretty simple. In fact, the logic is just 4 lines of code. http://jsfiddle.net/staltz/4gGgs/25/
+Well, in FRP it's pretty simple. In fact, the logic is just [4 lines of code](http://jsfiddle.net/staltz/4gGgs/26/).
 But let's ignore code for now. Thinking in diagrams is the best way to understand and build streams, whether you're a beginner or an expert.
 
 ![Multiple clicks stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/b580ad4a33b63acb2ced9b8e5e90faab8ca7ef26/zmulticlickstream.png)
