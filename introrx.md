@@ -176,7 +176,7 @@ var responseMetastream = requestStream
   });
 ```
 
-Then we will have created a beast called "_metastream_": a stream of streams. Don't panic yet. A metastream is a stream where each emitted value is yet another stream. You can think of it as [pointers](https://en.wikipedia.org/wiki/Pointer_(computer_programming)): each emitted value is a _pointer_ to another stream.
+Then we will have created a beast called "_metastream_": a stream of streams. Don't panic yet. A metastream is a stream where each emitted value is yet another stream. You can think of it as [pointers](https://en.wikipedia.org/wiki/Pointer_(computer_programming)): each emitted value is a _pointer_ to another stream. In our example, each request URL is mapped to a pointer to the promise stream containing the corresponding response.
 
 ![Response metastream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/e8fd1bb6bd93533cf8afae42bdf19bdff92fbc2c/zresponsemetastream.png)
 
