@@ -139,9 +139,9 @@ requestStream.subscribe(function(requestUrl) {
   // execute the request
   var responseStream = Rx.Observable.create(function (observer) {
     jQuery.getJSON(requestUrl)
-    .then(function(response) { observer.onNext(response); })
+    .done(function(response) { observer.onNext(response); })
     .fail(function(jqXHR, status, error) { observer.onError(error); })
-    .done(function() { observer.onCompleted(); });
+    .always(function() { observer.onCompleted(); });
   });
   
   responseStream.subscribe(function(response) {
