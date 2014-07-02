@@ -76,7 +76,7 @@ FRP raises the level of abstraction of your code so you can focus on the interde
 
 The benefit is more evident in modern webapps and mobile apps that are highly interactive with a multitude of UI events related to data events. 10 years ago, interaction with web pages was basically about submitting a long form to the backend and performing simple rendering to the frontend. Apps have evolved to be more real-time: modifying a single form field can automatically trigger a save to the backend, "likes" to some content can be reflected in real time to other connected users, and so forth.
 
-Apps nowadays have an abundancy of real-time events of every kind that enable a highly interactive experience to the user. We need tools for properly dealing with that, and Functional Reactive Programming is the answer.
+Apps nowadays have an abundancy of real-time events of every kind that enable a highly interactive experience to the user. We need tools for properly dealing with that, and Reactive Programming is an answer.
 
 ## Thinking in FRP, with examples
 
@@ -103,7 +103,7 @@ The complete code for this is ready at http://jsfiddle.net/staltz/8jFJH/48/ in c
 
 ## Request and response
 
-**How do you approach this problem with FRP?** Well, to start with, (almost) _everything can be a stream_. That's the FRP mantra. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". Obviously, this is simply about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream. At first this will feel like an overkill, but we need to start from the basics, right?
+**How do you approach this problem with FRP?** Well, to start with, (almost) _everything can be a stream_. That's the FRP mantra. Let's start with the easiest feature: "on startup, load 3 accounts data from the API". There is nothing special here, this is simply about (1) doing a request, (2) getting a response, (3) rendering the response. So let's go ahead and represent our requests as a stream. At first this will feel like overkill, but we need to start from the basics, right?
 
 On startup we need to do only one request, so if we model it as a data stream, it will be a stream with only one emitted value. Later, we know we will have many requests happening, but for now, it is just one.
 
@@ -132,7 +132,7 @@ requestStream.subscribe(function(requestUrl) {
 }
 ```
 
-Notice we are using a jQuery Ajax callback (which we assume you [should know already](http://devdocs.io/jquery/jquery.getjson)) to handle the asynchronicity of the request operation. But wait a moment, FRP is for dealing with **asynchronous** data streams. Couldn't the response for that request be a stream containing the data arriving at some time in the future? Well, at a conceptual level, it sure looks like, so let's try that.
+Notice we are using a jQuery Ajax callback (which we assume you [should know already](http://devdocs.io/jquery/jquery.getjson)) to handle the asynchronicity of the request operation. But wait a moment, FRP is for dealing with **asynchronous** data streams. Couldn't the response for that request be a stream containing the data arriving at some time in the future? Well, at a conceptual level, it sure looks like it, so let's try that.
 
 ```javascript
 requestStream.subscribe(function(requestUrl) {
@@ -552,6 +552,6 @@ Once you start getting the hang of programming with Rx*, it is absolutely requir
 
 But Functional Reactive Programming is not just Rx*. There is [Bacon.js](http://baconjs.github.io/) which is intuitive to work with, without the quirks you sometimes encounter in Rx*. The [Elm Language](http://elm-lang.org/) lives in its own category: it's an FRP **language** that compiles to JavaScript + HTML + CSS, and features a [time travelling debugger](http://debug.elm-lang.org/). Pretty awesome.
 
-FRP works great for event-heavy frontends and apps. But it is not just a client-side thing, it works great also in the backend and close to databases. In fact, [RxJava is a key component for enabling server-side concurrency in Netflix's API](http://techblog.netflix.com/2013/02/rxjava-netflix-api.html). FRP is not a framework restricted to one specific type of application or language. It really is a paradigm that you can apply for programming any event-driven software.
+FRP works great for event-heavy frontends and apps. But it is not just a client-side thing, it works great also in the backend and close to databases. In fact, [RxJava is a key component for enabling server-side concurrency in Netflix's API](http://techblog.netflix.com/2013/02/rxjava-netflix-api.html). FRP is not a framework restricted to one specific type of application or language. It really is a paradigm that you can use when programming any event-driven software.
 
 If this tutorial helped you, [tweet it forward](https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fgist.github.com%2Fstaltz%2F868e7e9bc2a7b8c1f754%2F&amp;text=The%20introduction%20to%20Reactive%20Programming%20you%27ve%20been%20missing&amp;tw_p=tweetbutton&amp;url=https%3A%2F%2Fgist.github.com%2Fstaltz%2F868e7e9bc2a7b8c1f754&amp;via=andrestaltz).
