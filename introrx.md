@@ -64,7 +64,7 @@ To show the real power of FRP, let's just say that you want to have a stream of 
 Well, in FRP it's pretty simple. In fact, the logic is just [4 lines of code](http://jsfiddle.net/staltz/4gGgs/27/).
 But let's ignore code for now. Thinking in diagrams is the best way to understand and build streams, whether you're a beginner or an expert.
 
-![Multiple clicks stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/b580ad4a33b63acb2ced9b8e5e90faab8ca7ef26/zmulticlickstream.png)
+![Multiple clicks stream](http://i.imgur.com/HMGWNO5.png)
 
 Grey boxes are functions transforming one stream into another. First we accumulate clicks in lists, whenever 250 milliseconds of "event silence" has happened (that's what `buffer(stream.throttle(250ms))` does, in a nutshell. Don't worry about understanding the details at this point, we are just demoing FRP for now). The result is a stream of lists, from which we apply `map()` to map each list to an integer matching the length of that list. Finally, we ignore `1` integers using the `filter(x >= 2)` function. That's it: 3 operations to produce our intended stream. We can then subscribe ("listen") to it to react accordingly how we wish.
 
@@ -88,7 +88,7 @@ I picked **JavaScript** and **[RxJS](https://github.com/Reactive-Extensions/RxJS
 
 In Twitter there is this UI element that suggests other accounts you could follow:
 
-![Twitter Who to follow suggestions box](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/21303570a1c8c599e59f8f8fbda2d03ab943ac9b/ztwitterbox.png)
+![Twitter Who to follow suggestions box](http://imgur.com/eAlNb0j)
 
 We are going to focus on imitating its core features, which are:
 
