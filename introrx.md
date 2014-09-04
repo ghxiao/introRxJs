@@ -88,7 +88,7 @@ I picked **JavaScript** and **[RxJS](https://github.com/Reactive-Extensions/RxJS
 
 In Twitter there is this UI element that suggests other accounts you could follow:
 
-![Twitter Who to follow suggestions box](http://imgur.com/eAlNb0j)
+![Twitter Who to follow suggestions box](http://i.imgur.com/eAlNb0j.png)
 
 We are going to focus on imitating its core features, which are:
 
@@ -179,7 +179,7 @@ var responseMetastream = requestStream
 
 Then we will have created a beast called "_metastream_": a stream of streams. Don't panic yet. A metastream is a stream where each emitted value is yet another stream. You can think of it as [pointers](https://en.wikipedia.org/wiki/Pointer_(computer_programming)): each emitted value is a _pointer_ to another stream. In our example, each request URL is mapped to a pointer to the promise stream containing the corresponding response.
 
-![Response metastream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/e8fd1bb6bd93533cf8afae42bdf19bdff92fbc2c/zresponsemetastream.png)
+![Response metastream](http://i.imgur.com/HHnmlac.png)
 
 A metastream for responses looks confusing, and doesn't seem to help us at all. We just want a simple stream of responses, where each emitted value is a JSON object, not a 'Promise' of a JSON object. Say hi to [Mr. Flatmap](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md#rxobservableprototypeflatmapselector-resultselector): a version of `map()` than "flattens" a metastream, by emitting on the "trunk" stream everything that will be emitted on "branch" streams. Flatmap is not a "fix" and metastreams are not a bug, these are really the tools for dealing with asynchronous responses in FRP.
 
@@ -190,7 +190,7 @@ var responseStream = requestStream
   });
 ```
 
-![Response stream](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/746a5e17328368bcba5dbd397b84fe8079eef7dd/zresponsestream.png)
+![Response stream](http://i.imgur.com/Hi3zNzJ.png)
 
 Nice. And because the response stream is defined according to request stream, **if** we have later on more events happening on request stream, we will have the corresponding response events happening on response stream, as expected:
 
@@ -334,7 +334,7 @@ No, not so fast, pal. This is bad, because we now have **two** subscribers that 
 &nbsp;
 &nbsp;
 
-![Mantra](https://gist.githubusercontent.com/staltz/868e7e9bc2a7b8c1f754/raw/796be9b66ff7ce58b90e65a49e3b9832b862dedd/zmantra.jpg)
+![Mantra](http://i.imgur.com/AIimQ8C.jpg)
 
 So let's model a suggestion as a stream, where each emitted value is the JSON object containing the suggestion data. We will do this separately for each of the 3 suggestions. This is how the stream for suggestion #1 could look like:
 
