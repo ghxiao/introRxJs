@@ -118,7 +118,7 @@ This is a stream of URLs that we want to request. Whenever a request event happe
 To create such stream with a single value is very simple in Rx*. The official terminology for a stream is "Observable", for the fact that it can be observed, but I find it to be a silly name, so I call it _stream_.
 
 ```javascript
-var requestStream = Rx.Observable.returnValue('https://api.github.com/users');
+var requestStream = Rx.Observable.just('https://api.github.com/users');
 ```
 
 But now, that is just a stream of strings, doing no other operation, so we need to somehow make something happen when that value is emitted. That's done by [subscribing](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md#rxobservableprototypesubscribeobserver--onnext-onerror-oncompleted) to the stream.
@@ -212,7 +212,7 @@ responseStream.subscribe(function(response) {
 Joining all the code until now, we have:
 
 ```javascript
-var requestStream = Rx.Observable.returnValue('https://api.github.com/users');
+var requestStream = Rx.Observable.just('https://api.github.com/users');
 
 var responseStream = requestStream
   .flatMap(function(requestUrl) {
@@ -256,7 +256,7 @@ var requestOnRefreshStream = refreshClickStream
     return 'https://api.github.com/users?since=' + randomOffset;
   });
   
-var startupRequestStream = Rx.Observable.returnValue('https://api.github.com/users');
+var startupRequestStream = Rx.Observable.just('https://api.github.com/users');
 ```
 
 But how can we "merge" these two into one? Well, there's [`merge()`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md#rxobservableprototypemergemaxconcurrent--other). Explained in the diagram dialect, this is what it does:
@@ -277,7 +277,7 @@ var requestOnRefreshStream = refreshClickStream
     return 'https://api.github.com/users?since=' + randomOffset;
   });
   
-var startupRequestStream = Rx.Observable.returnValue('https://api.github.com/users');
+var startupRequestStream = Rx.Observable.just('https://api.github.com/users');
 
 var requestStream = Rx.Observable.merge(
   requestOnRefreshStream, startupRequestStream
@@ -292,7 +292,7 @@ var requestStream = refreshClickStream
     var randomOffset = Math.floor(Math.random()*500);
     return 'https://api.github.com/users?since=' + randomOffset;
   })
-  .merge(Rx.Observable.returnValue('https://api.github.com/users'));
+  .merge(Rx.Observable.just('https://api.github.com/users'));
 ```
 
 Even shorter, even more readable:
