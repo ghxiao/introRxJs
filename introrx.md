@@ -555,3 +555,11 @@ But Reactive Programming is not just Rx*. There is [Bacon.js](http://baconjs.git
 Rx works great for event-heavy frontends and apps. But it is not just a client-side thing, it works great also in the backend and close to databases. In fact, [RxJava is a key component for enabling server-side concurrency in Netflix's API](http://techblog.netflix.com/2013/02/rxjava-netflix-api.html). Rx is not a framework restricted to one specific type of application or language. It really is a paradigm that you can use when programming any event-driven software.
 
 If this tutorial helped you, [tweet it forward](https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fgist.github.com%2Fstaltz%2F868e7e9bc2a7b8c1f754%2F&amp;text=The%20introduction%20to%20Reactive%20Programming%20you%27ve%20been%20missing&amp;tw_p=tweetbutton&amp;url=https%3A%2F%2Fgist.github.com%2Fstaltz%2F868e7e9bc2a7b8c1f754&amp;via=andrestaltz).
+
+- - -
+
+### Legal
+
+© Andre Cesar de Souza Medeiros (alias "Andre Staltz"), 2014. Unauthorized use and/or duplication of this material without express and written permission from this site’s author and/or owner is strictly prohibited. Excerpts and links may be used, provided that full and clear credit is given to Andre Medeiros and http://andre.staltz.com with appropriate and specific direction to the original content.
+
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">"Introduction to Reactive Programming you've been missing"</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://andre.staltz.com" property="cc:attributionName" rel="cc:attributionURL">Andre Staltz</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="https://gist.github.com/staltz/868e7e9bc2a7b8c1f754" rel="dct:source">https://gist.github.com/staltz/868e7e9bc2a7b8c1f754</a>.
