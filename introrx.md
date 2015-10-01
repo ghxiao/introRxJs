@@ -1,6 +1,14 @@
 ## The introduction to Reactive Programming you've been missing
 (by [@andrestaltz](https://twitter.com/andrestaltz))
 
+- - -
+
+### This tutorial as a series of videos
+
+**If you prefer to watch video tutorials with live-coding, then check out this series I recorded with the same contents as in this article: [Egghead.io - Introduction to Reactive Programming](https://egghead.io/series/introduction-to-reactive-programming).**
+
+- - -
+
 So you're curious in learning this new thing called Reactive Programming, particularly its variant comprising of Rx, Bacon.js, RAC, and others.
 
 Learning it is hard, even harder by the lack of good material. When I started, I tried looking for tutorials. I found only a handful of practical guides, but they just scratched the surface and never tackled the challenge of building the whole architecture around it. Library documentations often don't help when you're trying to understand some function. I mean, honestly, look at this:
