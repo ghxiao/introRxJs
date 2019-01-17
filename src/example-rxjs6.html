@@ -96,7 +96,7 @@
 
 
     const responseStream = requestStream.pipe(
-        rxjs.operators.flatMap(requestUrl => rxjs.from(.getJSON(requestUrl)))
+        rxjs.operators.flatMap(requestUrl => rxjs.from($.getJSON(requestUrl)))
         //rxjs.operators.flatMap(requestUrl => rxjs.from(fetch(requestUrl)))
     );
 

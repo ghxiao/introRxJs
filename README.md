@@ -166,7 +166,7 @@ What [`Rx.Observable.create()`](https://github.com/Reactive-Extensions/RxJS/blob
 &nbsp;
 &nbsp;
 
-![Amazed](http://www.myfacewhen.net/uploads/3324-amazed-face.gif)
+<!-- ![Amazed](http://www.myfacewhen.net/uploads/3324-amazed-face.gif) -->
 
 Yes.
 
