@@ -72,46 +72,57 @@
 
 
 <script src="https://unpkg.com/@reactivex/rxjs@6.3.3/dist/global/rxjs.umd.js"></script>
-<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<!--<script src="https://code.jquery.com/jquery-2.2.4.js"></script>-->
 
 <script>
+
+    const { fromEvent } = rxjs;
+    const { startWith, map, flatMap, combineLatest, merge} = rxjs.operators;
+    const { ajax } = rxjs.ajax;
+
     const refreshButton = document.querySelector('.refresh');
     const closeButton1 = document.querySelector('.close1');
     const closeButton2 = document.querySelector('.close2');
     const closeButton3 = document.querySelector('.close3');
 
 
-    const refreshClickStream = rxjs.fromEvent(refreshButton, 'click');
-    const close1ClickStream = rxjs.fromEvent(closeButton1, 'click');
-    const close2ClickStream = rxjs.fromEvent(closeButton2, 'click');
-    const close3ClickStream = rxjs.fromEvent(closeButton3, 'click');
+    const refreshClickStream = fromEvent(refreshButton, 'click');
+    const close1ClickStream = fromEvent(closeButton1, 'click');
+    const close2ClickStream = fromEvent(closeButton2, 'click');
+    const close3ClickStream = fromEvent(closeButton3, 'click');
 
     const requestStream = refreshClickStream.pipe(
-        rxjs.operators.startWith('startup click'),
-        rxjs.operators.map(() => {
+        startWith('startup click'),
+        map(() => {
             const randomOffset = Math.floor(Math.random() * 500);
             return 'https://api.github.com/users?since=' + randomOffset;
         })
     );
 
-
     const responseStream = requestStream.pipe(
-        rxjs.operators.flatMap(requestUrl => rxjs.from($.getJSON(requestUrl)))
-        //rxjs.operators.flatMap(requestUrl => rxjs.from(fetch(requestUrl)))
+        // 1. we can use jquery
+        //flatMap(requestUrl => rxjs.from($.getJSON(requestUrl)))
+
+        // 2. or use fetch
+        // flatMap(requestUrl => rxjs.from(fetch(requestUrl))),
+        // flatMap(response => response.json())
+
+        // 3. or use rxjs.ajax
+        flatMap(requestUrl => ajax.getJSON(requestUrl)),
     );
 
     function createSuggestionStream(closeClickStream) {
         return closeClickStream.pipe(
-            rxjs.operators.startWith('startup click'),
-            rxjs.operators.combineLatest(responseStream,
+            startWith('startup click'),
+            combineLatest(responseStream,
                 (click, listUsers) => listUsers[Math.floor(Math.random() * listUsers.length)]
             ),
-            rxjs.operators.merge(
+            merge(
                 refreshClickStream.pipe(
-                    rxjs.operators.map(() => null)
+                    map(() => null)
                 )
             ),
-            rxjs.operators.startWith(null)
+            startWith(null)
         );
     }
 
