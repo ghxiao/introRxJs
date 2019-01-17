@@ -1,0 +1,154 @@
+<html lang="en">
+
+<head>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 10px;
+        }
+
+        h2 {
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .refresh {
+            font-size: 80%;
+            margin-left: 10px;
+        }
+
+        .header {
+            background: #ECECEC;
+            padding: 5px;
+        }
+
+        .suggestions {
+            border: 2px solid #ECECEC;
+        }
+
+        li {
+            padding: 5px;
+        }
+
+        li img {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+        }
+
+        li .username,
+        li .close {
+            display: inline-block;
+            position: relative;
+            bottom: 15px;
+            left: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="header">
+        <h2>Who to follow</h2><a href="#" class="refresh">Refresh</a>
+    </div>
+    <ul class="suggestions">
+        <li class="suggestion1">
+            <img/>
+            <a href="#" target="_blank" class="username">this will not be displayed</a>
+            <a href="#" class="close close1">x</a>
+        </li>
+        <li class="suggestion2">
+            <img/>
+            <a href="#" target="_blank" class="username">neither this</a>
+            <a href="#" class="close close2">x</a>
+        </li>
+        <li class="suggestion3">
+            <img/>
+            <a href="#" target="_blank" class="username">nor this</a>
+            <a href="#" class="close close3">x</a>
+        </li>
+    </ul>
+</div>
+
+
+<script src="https://unpkg.com/@reactivex/rxjs@6.3.3/dist/global/rxjs.umd.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+
+<script>
+    const refreshButton = document.querySelector('.refresh');
+    const closeButton1 = document.querySelector('.close1');
+    const closeButton2 = document.querySelector('.close2');
+    const closeButton3 = document.querySelector('.close3');
+
+
+    const refreshClickStream = rxjs.fromEvent(refreshButton, 'click');
+    const close1ClickStream = rxjs.fromEvent(closeButton1, 'click');
+    const close2ClickStream = rxjs.fromEvent(closeButton2, 'click');
+    const close3ClickStream = rxjs.fromEvent(closeButton3, 'click');
+
+    const requestStream = refreshClickStream.pipe(
+        rxjs.operators.startWith('startup click'),
+        rxjs.operators.map(() => {
+            const randomOffset = Math.floor(Math.random() * 500);
+            return 'https://api.github.com/users?since=' + randomOffset;
+        })
+    );
+
+
+    const responseStream = requestStream.pipe(
+        rxjs.operators.flatMap(requestUrl => rxjs.from(.getJSON(requestUrl)))
+        //rxjs.operators.flatMap(requestUrl => rxjs.from(fetch(requestUrl)))
+    );
+
+    function createSuggestionStream(closeClickStream) {
+        return closeClickStream.pipe(
+            rxjs.operators.startWith('startup click'),
+            rxjs.operators.combineLatest(responseStream,
+                (click, listUsers) => listUsers[Math.floor(Math.random() * listUsers.length)]
+            ),
+            rxjs.operators.merge(
+                refreshClickStream.pipe(
+                    rxjs.operators.map(() => null)
+                )
+            ),
+            rxjs.operators.startWith(null)
+        );
+    }
+
+    const suggestion1Stream = createSuggestionStream(close1ClickStream);
+    const suggestion2Stream = createSuggestionStream(close2ClickStream);
+    const suggestion3Stream = createSuggestionStream(close3ClickStream);
+
+
+    // Rendering ---------------------------------------------------
+    function renderSuggestion(suggestedUser, selector) {
+        const suggestionEl = document.querySelector(selector);
+        //if (suggestedUser === null) {
+        if (!suggestedUser) {
+            suggestionEl.style.visibility = 'hidden';
+        } else {
+            suggestionEl.style.visibility = 'visible';
+            const usernameEl = suggestionEl.querySelector('.username');
+            usernameEl.href = suggestedUser.html_url;
+            usernameEl.textContent = suggestedUser.login;
+            const imgEl = suggestionEl.querySelector('img');
+            imgEl.src = "";
+            imgEl.src = suggestedUser.avatar_url;
+        }
+    }
+
+    suggestion1Stream.subscribe(suggestedUser => {
+        renderSuggestion(suggestedUser, '.suggestion1');
+    });
+
+    suggestion2Stream.subscribe(suggestedUser => {
+        renderSuggestion(suggestedUser, '.suggestion2');
+    });
+
+    suggestion3Stream.subscribe(suggestedUser => {
+        renderSuggestion(suggestedUser, '.suggestion3');
+    });
+</script>
+</body>
+
+</html>
