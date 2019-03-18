@@ -1,0 +1,147 @@
+<html lang="en">
+
+<head>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 10px;
+        }
+
+        h2 {
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .refresh {
+            font-size: 80%;
+            margin-left: 10px;
+        }
+
+        .header {
+            background: #ECECEC;
+            padding: 5px;
+        }
+
+        .suggestions {
+            border: 2px solid #ECECEC;
+        }
+
+        li {
+            padding: 5px;
+        }
+
+        li img {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+        }
+
+        li .username,
+        li .close {
+            display: inline-block;
+            position: relative;
+            bottom: 15px;
+            left: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="header">
+        <h2>Who to follow</h2><a href="#" class="refresh">Refresh</a>
+    </div>
+    <ul class="suggestions">
+        <li class="suggestion1">
+            <img/>
+            <a href="#" target="_blank" class="username">this will not be displayed</a>
+            <a href="#" class="close close1">x</a>
+        </li>
+        <li class="suggestion2">
+            <img/>
+            <a href="#" target="_blank" class="username">neither this</a>
+            <a href="#" class="close close2">x</a>
+        </li>
+        <li class="suggestion3">
+            <img/>
+            <a href="#" target="_blank" class="username">nor this</a>
+            <a href="#" class="close close3">x</a>
+        </li>
+    </ul>
+</div>
+
+
+<script src="https://unpkg.com/@reactivex/rxjs@6.3.3/dist/global/rxjs.umd.js"></script>
+
+<script>
+
+    const {fromEvent} = rxjs;
+    const {startWith, map, flatMap, combineLatest, merge} = rxjs.operators;
+    const {ajax} = rxjs.ajax;
+
+    const refreshButton = document.querySelector('.refresh');
+
+    const closeButtons = [1, 2, 3].map(i => document.querySelector('.close' + i));
+
+    const refreshClickStream = fromEvent(refreshButton, 'click');
+
+    const closeButtonClickStreams = closeButtons.map(b => fromEvent(b, 'click'));
+
+    const requestStream = refreshClickStream.pipe(
+        startWith('startup click'),
+        map(() => {
+            const randomOffset = Math.floor(Math.random() * 500);
+            return 'https://api.github.com/users?since=' + randomOffset;
+        })
+    );
+
+    const responseStream = requestStream.pipe(
+        // 1. we can use jquery
+        // flatMap(requestUrl => rxjs.from($.getJSON(requestUrl)))
+
+        // 2. or use fetch
+        // flatMap(requestUrl => rxjs.from(fetch(requestUrl))),
+        // flatMap(response => response.json())
+
+        // 3. or use rxjs.ajax
+        flatMap(requestUrl => ajax.getJSON(requestUrl)),
+    );
+
+    function createSuggestionStream(closeClickStream) {
+        return closeClickStream.pipe(
+            startWith('startup click'),
+            combineLatest(responseStream,
+                (click, listUsers) => listUsers[Math.floor(Math.random() * listUsers.length)]
+            ),
+            merge(
+                refreshClickStream.pipe(map(() => null))
+            ),
+            startWith(null)
+        );
+    }
+
+    const suggestionStreams = closeButtonClickStreams.map(createSuggestionStream);
+
+    // Rendering ---------------------------------------------------
+    function renderSuggestion(suggestedUser, selector) {
+        const suggestionEl = document.querySelector(selector);
+        if (suggestedUser === null) {
+            suggestionEl.style.visibility = 'hidden';
+        } else {
+            suggestionEl.style.visibility = 'visible';
+            const usernameEl = suggestionEl.querySelector('.username');
+            usernameEl.href = suggestedUser.html_url;
+            usernameEl.textContent = suggestedUser.login;
+            const imgEl = suggestionEl.querySelector('img');
+            imgEl.src = suggestedUser.avatar_url;
+        }
+    }
+
+    suggestionStreams.forEach((s, i) =>
+        s.subscribe(suggestedUser => renderSuggestion(suggestedUser, '.suggestion' + (i + 1)))
+    );
+
+</script>
+</body>
+
+</html>
